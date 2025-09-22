@@ -1,0 +1,43 @@
+# Archivo de prueba para el TP de Tópicos de Programación
+# Formato: DNI;Apellido y Nombre;Fecha Nacimiento(DD/MM/AAAA);Sexo;Fecha Afiliacion(DD/MM/AAAA);Fecha Ultima Cuota(DD/MM/AAAA);Plan;Email Tutor
+# Nota: Los campos 'categoria' y 'estado' no están en este archivo porque son generados por el programa.
+
+# --- REGISTROS VÁLIDOS ---
+
+25123456;Gomez, Juan Carlos;15/05/1980;M;01/03/2010;10/09/2025;VIP;
+# Debería ser VÁLIDO. Es un adulto, por lo que no necesita email de tutor.
+
+45876123;pEREZ ana maria;20/08/2010;F;10/01/2023;05/08/2025;FAMILY;tutor.ana@email.com
+# Debería ser VÁLIDO. Es menor de edad y tiene email. El nombre necesita normalización.
+
+18987654;Garcia  Miguel Angel;10/12/1965;M;15/02/2020;18/09/2025;PREMIUM;
+# Debería ser VÁLIDO. Tiene espacios extra en el nombre para probar la normalización.
+
+# --- REGISTROS CON ERRORES ---
+
+900123;Diaz, Laura;12/11/1995;F;01/01/2022;01/09/2025;BASIC;
+# ERROR: DNI fuera del rango válido (menor a 1000000).
+
+48111222;Fernandez, Lucas;30/10/2018;M;01/11/2024;02/09/2025;BASIC;lucas.tutor@email.com
+# ERROR: Fecha de nacimiento inválida (el socio es menor de 10 años para una fecha de proceso en 2025).
+
+30456789;Martinez Sofia;31/04/1990;F;01/01/2020;01/09/2025;PREMIUM;
+# ERROR: Fecha de nacimiento con formato inválido (Abril no tiene 31 días).
+
+22123987;Romero, Carla;05/06/1975;X;10/07/2015;10/08/2025;VIP;
+# ERROR: Sexo inválido (debe ser 'F' o 'M').
+
+33444555;Sosa, Ricardo;25/08/1999;M;10/05/1998;15/06/2025;FAMILY;
+# ERROR: Fecha de afiliación es anterior a la fecha de nacimiento.
+
+28765432;Acosta, Veronica;19/02/1985;F;20/03/2019;15/01/2019;BASIC;
+# ERROR: Fecha de última cuota paga es anterior a la fecha de afiliación.
+
+31555888;benitez claudio;01/07/1991;M;01/01/2021;01/09/2025;GOLD;
+# ERROR: Plan inválido (no existe el plan "GOLD").
+
+46123789;Alvarez, Mateo;15/09/2012;M;10/10/2023;11/08/2025;FAMILY;
+# ERROR: Es menor de edad pero no tiene un email de tutor asociado.
+
+47654321;Rios, Valentina;03/04/2014;F;01/01/2024;01/09/2025;VIP;valentina.rios.email
+# ERROR: Es menor de edad pero el email del tutor tiene un formato inválido.
