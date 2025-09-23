@@ -94,3 +94,21 @@ void ingresarFecha()
     printf("\n FECHA INGRESADA: %d/%d/%d",fecha.dia,fecha.mes,fecha.anio);
 }
 
+bool leerYGenerarArchivo()
+{
+
+    FILE* bin, *txt;
+    
+    txt = fopen(arch_miembros_txt, "rt");
+
+    if (!txt)
+        printf("No se pudo abrir el archivo %s",arch_miembros_txt);
+    
+    bin = fopen (arch_miembros,"wb");
+
+
+
+
+}
+
+

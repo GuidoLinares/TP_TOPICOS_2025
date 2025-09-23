@@ -9,40 +9,44 @@ int main()
 
     ingresarFecha();
     
-    leerArchivo(arch_miembros_txt);
-    generarArch();
-
-    puts("\n\n====== DESPLEGANDO MENU ======");
-    
-    mostrarMenu();
-    
-    puts("Ingrese opcion: ");
-    op = ingresoYvalidaOpcion('A','G');
-
-    switch (op)
+    if(!leerYGenerarArchivo())
+        printf("NO SE PUDO CREAR EL ARCHIVO %s",arch_miembros);
+    else
     {
-    case 'a':
-        //altaUsuario();
-        break;
-    case 'b':
-        //bajaUsuario();
-        break;
-    case 'c':
-        //modificarUsuario();
-        break;
-    case 'd':
-        //mostrarInfoMiembro();
-        break;
-    case 'e':
-        //listarMiembros();
-        break;
-    case 'f':
-        //listarMiembrosxPlan();
-        break;
-    case 'g':
-        break;
+        puts("\n\n====== DESPLEGANDO MENU ======");
+    
+        mostrarMenu();
+        
+        puts("Ingrese opcion: ");
+        op = ingresoYvalidaOpcion('A','G');
+
+        switch (op)
+        {
+        case 'a':
+            //altaUsuario();
+            break;
+        case 'b':
+            //bajaUsuario();
+            break;
+        case 'c':
+            //modificarUsuario();
+            break;
+        case 'd':
+            //mostrarInfoMiembro();
+            break;
+        case 'e':
+            //listarMiembros();
+            break;
+        case 'f':
+            //listarMiembrosxPlan();
+            break;
+        case 'g':
+            break;
+        }
+
     }
 
+    
     return 0;
 }
 

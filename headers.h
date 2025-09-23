@@ -8,8 +8,8 @@
 #include <ctype.h>
 
 #define tam 20
-#define arch_error "error-VC-%d%d%d.txt"
-#define arch_miembros "miembros-VC-%d%d%d.dat"
+#define arch_error "error-VC-fechaIngreso.txt"
+#define arch_miembros "miembros-VC.dat"
 #define arch_miembros_txt "miembros-VC.txt"
 
 typedef struct 
