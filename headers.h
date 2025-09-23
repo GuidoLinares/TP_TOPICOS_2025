@@ -33,15 +33,10 @@ typedef struct
 
 t_Fecha fechaProcesoGlobal;
 
-
-void mostrarMenu();
+///////////// VALIDACIONES ///////////// 
 long validarDNI(long,long, long);
-void normalizarCadena(char*);
 char validarChar();
 char ingresoYvalidaOpcion(char,char);
-void ingresarFecha();
-char validarOp(char li, char ls);
-bool esBisiesto(int anio);
 bool validarFecha(t_Fecha fecha);
 bool validarFechaNacimiento(t_Fecha fechaNacimiento, t_Fecha fechaProceso);
 bool validarFechaAfiliacion(t_Fecha fechaAfiliacion, t_Fecha fechaProceso, t_Fecha fechaNacimiento);
@@ -49,11 +44,26 @@ bool validarFechaUltimaCuota(t_Fecha fechaCuota, t_Fecha fechaAfiliacion, t_Fech
 bool validarEmail(char email[]);
 char* validarCategoria(t_Fecha fechaNacimiento , t_Fecha fechaProceso);
 char* validarPlan();
-bool parsearLineas(s_miembros *miembroTemp, char* buffer);
-bool leerYGenerarArchivo();
-bool validarRegistros(const s_miembros* pMiembro, const t_Fecha* pFechaProceso, char* motivoError);
+char validarOp(char li, char ls);
 bool esPlanValido(const char* plan);
 bool esMenorDeEdad(t_Fecha fechaNac, t_Fecha fechaProc);
+
+///////////// MENU ///////////// 
+void mostrarMenu();
+
+///////////// MANEJO DE TEXTO ///////////// 
+void normalizarCadena(char*);
+bool parsearLineas(s_miembros *miembroTemp, char* buffer);
+
+///////////// FECHAS ///////////// 
+void ingresarFecha();
+bool esBisiesto(int anio);
+
+///////////// ARCHIVOS ///////////// 
+bool leerYGenerarArchivo();
+bool validarRegistros(const s_miembros* pMiembro, const t_Fecha* pFechaProceso, char* motivoError);
+int* cmp(const void *dato1, const void *dato2);
+
 
 
 

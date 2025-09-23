@@ -34,6 +34,7 @@ Observaciones:
 
 void indice_crear(t_indice *indice, size_t nmemb, size_t tamanyo);
 
+
 /**************************************************************************
 Descripción: redimensiona el tamaño del índice.
 Parámetros: indice: TDA índice.
@@ -43,6 +44,8 @@ Retorno: n/a.
 Observaciones: Debe proporcionar el nmemb incrementado en un 30%
 **************************************************************************/
 void indice_redimensionar(t_indice *indice, size_t nmemb, size_t tamanyo);
+
+
 /**************************************************************************
 Descripción: inserta en orden según la clave.
 Parámetros: indice: TDA índice.
@@ -54,6 +57,8 @@ Observaciones: Si el array está lleno, toma un 30 % más de memoria.
 **************************************************************************/
 int indice_insertar (t_indice *indice, const void *registro, size_t tamanyo,
 int (*cmp)(const void *, const void *));
+
+
 /**************************************************************************
 Descripción: elimina el registro del índice.
 Parámetros: indice: TDA índice.
@@ -65,6 +70,7 @@ Observaciones: -
 **************************************************************************/
 int indice_eliminar(t_indice *indice, const void *registro, size_t tamanyo, int
 (*cmp)(const void *, const void *));
+
 
 /**************************************************************************
 Descripción: si la clave existe deja el registro en registro.
@@ -79,6 +85,8 @@ Observaciones: -
 **************************************************************************/
 int indice_buscar (const t_indice *indice, const void *registro, size_t nmemb,
 size_t tamanyo, int (*cmp)(const void *, const void *));
+
+
 /**************************************************************************
 Descripción: determina si el índice contiene 0 (cero) elementos.
 Parámetros: indice: TDA índice.
@@ -86,6 +94,7 @@ Retorno: OK si está vacío, cualquier otro valor si no lo está.
 Observaciones: -
 **************************************************************************/
 int indice_vacio(const t_indice *indice);
+
 /**************************************************************************
 descripción: determina si el índice contiene el tamaño máximo posible.
 Parámetros: indice: TDA índice.
@@ -93,6 +102,7 @@ Retorno: OK si está lleno, cualquier otro valor si no lo está.
 Observaciones: -
 **************************************************************************/
 int indice_lleno(const t_indice *indice);
+
 /**************************************************************************
 Descripción: deja el índice vacío.
 Parámetros: indice: TDA indice.

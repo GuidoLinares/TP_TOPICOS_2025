@@ -189,13 +189,13 @@ bool leerYGenerarArchivo()
    
     while (fgets(buffer, sizeof(buffer), txt) != NULL)
     {  
-        //procesamiento de la linea del archivo txtº
+        //procesamiento de la linea del archivo texto
         char lineaLogError[512]; 
         strcpy(lineaLogError, buffer);//linea para el log de errores 
 
-        if (buffer[0] == '#' || buffer[0] == '\n') {
+        if (buffer[0] == '#' || buffer[0] == '\n')
             continue;
-        }
+        
 
         char motivoError[100];
         //PARSEAR LINEAS Y CARGAR UNA STRUCT TEMPORAL CON LOS REGISTROS
@@ -227,7 +227,19 @@ bool leerYGenerarArchivo()
     return true;
 }
     
+int* cmp(const void *dato1, const void *dato2)
+{
+    
+    long* dat1 = ((long*)dato1);
+    long* dat2 = ((long*)dato2);
 
+    if(dat1 < dat2)
+        return -1;
+    else if(dat1 > dat2)
+        return 1;
+    else
+        return 0;
+}
 
 
 

@@ -1,14 +1,19 @@
 //para compilar gcc -Wall main.c funciones.c validaciones.c -o main.exe ; ./main.exe
 #include "headers.h"
+#include "indice.h"
 
 int main()
 {
     char op;
+    t_indice miIndice;   
 
     puts("====== SISTEMA VIDECLUB CINEFILIA ======");    
 
     ingresarFecha();
-    
+    puts("Quiere recuperar el ultimo archivo cargado? (S o N): ");
+    /////implementar logica para recuperar archivo
+
+
     if(!leerYGenerarArchivo())
         printf("FALLO LA CREACION DE ARCHIVOS");
     else
