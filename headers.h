@@ -8,8 +8,6 @@
 #include <ctype.h>
 
 #define tam 20
-#define arch_error "error-VC-fechaIngreso.txt"
-#define arch_miembros "miembros-VC.dat"
 #define arch_miembros_txt "miembros-VC.txt"
 
 typedef struct 
@@ -33,10 +31,11 @@ typedef struct
     char email_tutor[30]; //Si el miembro es menor de edad, deberá tener un tutor asociado. pepe@galleta.com Se deberá validar el formato del email.
 }s_miembros;
 
+t_Fecha fechaProcesoGlobal;
 
 
 void mostrarMenu();
-long validarDNI(long, long);
+long validarDNI(long,long, long);
 void normalizarCadena(char*);
 char validarChar();
 char ingresoYvalidaOpcion(char,char);
@@ -50,7 +49,11 @@ bool validarFechaUltimaCuota(t_Fecha fechaCuota, t_Fecha fechaAfiliacion, t_Fech
 bool validarEmail(char email[]);
 char* validarCategoria(t_Fecha fechaNacimiento , t_Fecha fechaProceso);
 char* validarPlan();
-
+bool parsearLineas(s_miembros *miembroTemp, char* buffer);
+bool leerYGenerarArchivo();
+bool validarRegistros(const s_miembros* pMiembro, const t_Fecha* pFechaProceso, char* motivoError);
+bool esPlanValido(const char* plan);
+bool esMenorDeEdad(t_Fecha fechaNac, t_Fecha fechaProc);
 
 
 

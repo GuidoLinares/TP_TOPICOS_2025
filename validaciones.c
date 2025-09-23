@@ -1,12 +1,10 @@
 
 #include "headers.h"
 
-long validarDNI(long li, long ls)
+long validarDNI(long dni,long li, long ls)
 {
-    long dni;
     do
     {
-        scanf("%ld",&dni);
         if (dni < li || dni > ls)
             puts("DNI INVALIDO, ingrese nuevamente: ");
         
@@ -168,8 +166,77 @@ char* validarPlan()
             plan == 'V'? "VIP":"FAMILY";
 }
 
+bool esMenorDeEdad(t_Fecha fechaNacimiento, t_Fecha fechaProceso)
+{
+    int edad = fechaProceso.anio - fechaNacimiento.anio;
 
+    if (fechaProceso.mes < fechaNacimiento.mes || (fechaProceso.mes == fechaNacimiento.mes && fechaProceso.dia < fechaNacimiento.dia))
+        edad--;
+    
 
+    return edad < 18;
+}
+
+bool validarRegistros(const s_miembros* pMiembro, const t_Fecha* pFechaProceso, char* motivoError)
+{    
+    // 1. DNI 
+    if (pMiembro->DNI <= 1000000 || pMiembro->DNI >= 100000000) 
+    {
+        strcpy(motivoError, "DNI fuera de rango");
+        return false;
+    }
+
+    // 2. Sexo
+    if (pMiembro->sexo != 'F' && pMiembro->sexo != 'M') 
+    {
+        strcpy(motivoError, "Sexo invalido");
+        return false;
+    }
+
+    // 3. Fecha de Nacimiento
+    if (!validarFechaNacimiento(pMiembro->fecha_nacimiento, *pFechaProceso)) 
+    {
+        strcpy(motivoError, "Fecha de nacimiento invalida (<10 anios o formato incorrecto)");
+        return false;
+    }
+
+    // 4. Fecha de Afiliación
+    if (!validarFechaAfiliacion(pMiembro->fecha_afiliacion, *pFechaProceso, pMiembro->fecha_nacimiento)) 
+    {
+        strcpy(motivoError, "Fecha de afiliacion invalida (inconsistente con nacimiento/proceso)");
+        return false;
+    }
+
+    // 5. Fecha de Última Cuota
+    if (!validarFechaUltimaCuota(pMiembro->fecha_ultima_cuota_paga, pMiembro->fecha_afiliacion, *pFechaProceso)) 
+    {
+        strcpy(motivoError, "Fecha de ultima cuota paga invalida");
+        return false;
+    }
+
+    // 6. Plan
+    if (!esPlanValido(pMiembro->plan)) 
+    {
+        strcpy(motivoError, "Plan invalido");
+        return false;
+    }
+    
+    if (esMenorDeEdad(pMiembro->fecha_nacimiento, *pFechaProceso))
+    {
+        if (strlen(pMiembro->email_tutor) == 0) 
+        {
+            strcpy(motivoError, "Email de tutor requerido para menores de edad");
+            return false;
+        }
+        if (!validarEmail(pMiembro->email_tutor)) 
+        {
+            strcpy(motivoError, "Formato de email de tutor invalido");
+            return false;
+        }
+    }
+    
+    return true;
+}
 
 
 

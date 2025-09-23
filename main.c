@@ -10,7 +10,7 @@ int main()
     ingresarFecha();
     
     if(!leerYGenerarArchivo())
-        printf("NO SE PUDO CREAR EL ARCHIVO %s",arch_miembros);
+        printf("FALLO LA CREACION DE ARCHIVOS");
     else
     {
         puts("\n\n====== DESPLEGANDO MENU ======");

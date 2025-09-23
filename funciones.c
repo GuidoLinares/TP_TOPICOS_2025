@@ -78,37 +78,157 @@ void normalizarCadena(char* cadena )
 
 void ingresarFecha()
 {   
-    t_Fecha fecha;
 
     puts("INGRESE FECHA (dd/mm/aaaa): ");
     do
     {
-        scanf("%d",&fecha.dia);
-        scanf("%d",&fecha.mes);
-        scanf("%d",&fecha.anio);
-        if (!validarFecha(fecha))
+        scanf("%d",&fechaProcesoGlobal.dia);
+        scanf("%d",&fechaProcesoGlobal.mes);
+        scanf("%d",&fechaProcesoGlobal.anio);
+        if (!validarFecha(fechaProcesoGlobal))
             puts("Fecha invalida, ingrese nuevamente: ");
         
-    } while (!validarFecha(fecha));
+    } while (!validarFecha(fechaProcesoGlobal));
     
-    printf("\n FECHA INGRESADA: %d/%d/%d",fecha.dia,fecha.mes,fecha.anio);
+    printf("\n FECHA INGRESADA: %d/%d/%d",fechaProcesoGlobal.dia,fechaProcesoGlobal.mes,fechaProcesoGlobal.anio);
+}
+
+bool grabarArchError(const char* lineaError,char* motivoError, FILE*archError)
+{
+    return fprintf(archError, "%s;%s\n", lineaError, motivoError) >= 0 ;
+}
+
+bool grabarArchBin(const s_miembros *miembros, FILE* archBin)
+{
+    return fwrite(miembros, sizeof(s_miembros),1,archBin) == 1;
+}
+
+bool parsearLineas(s_miembros *miembroTemp, char* buffer)
+{
+    char* token = strtok(buffer, ";\n") ; //dni
+    if (!token)
+        return false;
+    
+    miembroTemp->DNI = atol(token);
+
+    token = strtok(NULL, ";\n") ; //apellido y nombre
+    if (!token)
+        return false;
+    
+    strcpy(miembroTemp->apellidoYnombre, token); 
+    
+    token = strtok(NULL, ";\n") ; //fecha nacimiento
+    if (!token)
+        return false;
+
+    sscanf(token,"%d/%d/%d",&miembroTemp->fecha_nacimiento.dia,&miembroTemp->fecha_nacimiento.mes,&miembroTemp->fecha_nacimiento.anio);
+
+    token = strtok(NULL, ";\n") ; //sexo
+    if (!token)
+        return false;
+
+    miembroTemp->sexo = token[0];
+
+    token = strtok(NULL, ";\n") ; //fecha de afiliacion
+    if (!token)
+        return false;
+
+    sscanf(token,"%d/%d/%d",&miembroTemp->fecha_afiliacion.dia,&miembroTemp->fecha_afiliacion.mes,&miembroTemp->fecha_afiliacion.anio);
+
+    token = strtok(NULL, ";\n") ; //fecha de ultima cuota
+    if (!token)
+        return false;
+
+    sscanf(token,"%d/%d/%d",&miembroTemp->fecha_ultima_cuota_paga.dia,&miembroTemp->fecha_ultima_cuota_paga.mes,&miembroTemp->fecha_ultima_cuota_paga.anio);
+
+    token = strtok(NULL, ";\n") ; //plan
+    if (!token)
+        return false;
+
+    strcpy(miembroTemp->plan,token);
+
+    token = strtok(NULL, ";\n") ; //email tutor 
+    if (token)
+        strcpy(miembroTemp->email_tutor,token);
+    else
+        strcpy(miembroTemp->email_tutor, "");
+
+    return true;
 }
 
 bool leerYGenerarArchivo()
 {
+    char nombreArchivoBin[50];
+    char nombreArchivoError[50];
 
-    FILE* bin, *txt;
-    
+    sprintf(nombreArchivoBin, "miembros-VC-%04d%02d%02d.dat", fechaProcesoGlobal.anio, fechaProcesoGlobal.mes, fechaProcesoGlobal.dia);
+    sprintf(nombreArchivoError, "error-VC-%04d%02d%02d.txt", fechaProcesoGlobal.anio, fechaProcesoGlobal.mes, fechaProcesoGlobal.dia);
+
+    char buffer[512];
+    FILE* bin, *txt, *error;
+    s_miembros miembroTemp;
     txt = fopen(arch_miembros_txt, "rt");
-
     if (!txt)
         printf("No se pudo abrir el archivo %s",arch_miembros_txt);
+
+    bin = fopen (nombreArchivoBin,"wb");
+    if (!bin)
+    {               
+        fclose(txt);
+        printf("No se pudo crear el archivo %s",nombreArchivoBin);
+    }    
+
+    error = fopen(nombreArchivoError, "wt");
+    if (!error)
+    {
+        fclose(txt);
+        fclose(bin);
+        printf("No se pudo crear el archivo %s",nombreArchivoError);
+    }
     
-    bin = fopen (arch_miembros,"wb");
+   
+    while (fgets(buffer, sizeof(buffer), txt) != NULL)
+    {  
+        //procesamiento de la linea del archivo txtº
+        char lineaLogError[512]; 
+        strcpy(lineaLogError, buffer);//linea para el log de errores 
 
+        if (buffer[0] == '#' || buffer[0] == '\n') {
+            continue;
+        }
 
+        char motivoError[100];
+        //PARSEAR LINEAS Y CARGAR UNA STRUCT TEMPORAL CON LOS REGISTROS
+        if(parsearLineas(&miembroTemp, buffer))
+        {
+             //VALIDAR REGISTRO COMPLETO Y MANEJO DE ERRORES DE ESCRITUR
+            if(!validarRegistros(&miembroTemp,&fechaProcesoGlobal,motivoError))
+                if(!grabarArchError(lineaLogError, motivoError, error))
+                    printf("Error al grabar el archivo %s",nombreArchivoError);
 
+            else
+            {
+                if (!grabarArchBin(&miembroTemp, bin))
+                    printf("Error al grabar el archivo %s",nombreArchivoBin);
+            }
+        }
+        else
+            if(!grabarArchError(lineaLogError, "Error de formato de linea", error))   
+                puts("ERROR al graba el archivo de errores\n");
 
+        
+    }
+
+    printf("\nProceso de migracion finalizado.\n");
+    fclose(txt);
+    fclose(bin);
+    fclose(error);
+
+    return true;
 }
+    
+
+
+
 
 
