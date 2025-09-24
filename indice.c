@@ -38,33 +38,81 @@ int indice_insertar (t_indice *indice, const void *registro, size_t tamanyo,int 
 int indice_eliminar(t_indice *indice, const void *registro, size_t tamanyo, int(*cmp)(const void *, const void *))
 {
 
+  int inicio = 0;
+  int fin = indice->cantidad_elementos_actual - 1;
+
+  int pos = indice_buscar(indice, registro, indice->cantidad_elementos_actual, tamanyo, cmp);
+  
+  if(pos == NO_EXISTE )
+    return ERROR;
+  
+  void* destino = (char*) indice->vindice + pos * tamanyo;
+  const void* origen = (const char*) destino + tamanyo;
+  
+  unsigned elementos_a_mover = indice->cantidad_elementos_actual - 1 - pos;
+
+  if (elementos_a_mover > 0 )
+      memmove(destino, origen, elementos_a_mover * tamanyo);
+  
+  
+  indice->cantidad_elementos_actual --;
+
+  return OK;
 }
 
 int indice_buscar (const t_indice *indice, const void *registro, size_t nmemb,size_t tamanyo, int (*cmp)(const void *, const void *))
 {
+  int inicio = 0;
+  int fin = indice->cantidad_elementos_actual - 1;
+  int medio;
 
-    
+  while (inicio <= fin)
+  { 
+    medio = (inicio + fin) / 2;
 
+    void* elemento = (char*)indice->vindice;
+
+    int resultado = cmp(medio,elemento);
+
+    if (resultado == 0)
+      return medio;
+    else if (resultado < 0)
+      fin = medio - 1;
+    else
+      inicio  = medio + 1; 
+  }
+  
+  return NO_EXISTE;
 }
 
 int indice_vacio(const t_indice *indice)
 {
-
+  if ((unsigned)indice->cantidad_elementos_actual == 0)
+    return OK;
+  else
+    return 2;
 }
 
 int indice_lleno(const t_indice *indice)
 {
-
+  if ((unsigned)indice->cantidad_elementos_actual >= (unsigned)indice->cantidad_elementos_maxima)
+    return OK;
+  else
+    return 2;
 }
 
 void indice_vaciar(t_indice* indice)
 {
-
+   while ((unsigned)indice->cantidad_elementos_actual != 0)
+  {
+    free(indice->vindice);
+    (unsigned)indice->cantidad_elementos_actual -- ;
+  }
 }
 
 int indice_cargar(const char* path, t_indice* indice, void *vreg_ind, size_t tamanyo, int (*cmp)(const void *, const void *))
 {
-
+ 
 }
 
 
