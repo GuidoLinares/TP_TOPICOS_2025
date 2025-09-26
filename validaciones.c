@@ -146,24 +146,16 @@ char* validarCategoria(t_Fecha fechaNacimiento , t_Fecha fechaProceso)
     return edadSocio >= 18 ? "ADULTO":"MENOR" ;
 }
 
-char* validarPlan()
+bool esPlanValido(const char* plan)
 {
-    char plan;
-    puts("PLANES DISPONIBLES: 'BASIC','PREMIUM','VIP','FAMILY'");
-    puts("INGRESE PLAN A ASIGNAR (B,P,V o F): ");
-    
-    do
+    if (strcmp(plan, "BASIC") == 0 ||
+        strcmp(plan, "PREMIUM") == 0 ||
+        strcmp(plan, "VIP") == 0 ||
+        strcmp(plan, "FAMILY") == 0)
     {
-        scanf(" %c",&plan);
-        plan = toupper(plan);
-        if (plan != 'B' && plan != 'P' && plan != 'V' && plan != 'F')
-            puts("OPCION INVALIDA, ingrese nuevamente: ");
-        
-    } while (plan != 'B' && plan != 'P' && plan != 'V' && plan != 'F');
-    
-    return  plan == 'B'? "BASIC": 
-            plan == 'P'? "PREMIUM":
-            plan == 'V'? "VIP":"FAMILY";
+        return true;
+    }
+    return false;
 }
 
 bool esMenorDeEdad(t_Fecha fechaNacimiento, t_Fecha fechaProceso)
@@ -234,6 +226,7 @@ bool validarRegistros(const s_miembros* pMiembro, const t_Fecha* pFechaProceso, 
             return false;
         }
     }
+
     
     return true;
 }

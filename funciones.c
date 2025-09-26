@@ -201,6 +201,9 @@ bool leerYGenerarArchivo()
         //PARSEAR LINEAS Y CARGAR UNA STRUCT TEMPORAL CON LOS REGISTROS
         if(parsearLineas(&miembroTemp, buffer))
         {
+            //ponemos todos los registros con el estado A
+            miembroTemp.estado = 'A';
+
              //VALIDAR REGISTRO COMPLETO Y MANEJO DE ERRORES DE ESCRITUR
             if(!validarRegistros(&miembroTemp,&fechaProcesoGlobal,motivoError))
             {    

@@ -28,7 +28,7 @@ int main()
         switch (op)
         {
         case 'a':
-            altaUsuario();
+            //altaUsuario();
             break;
         case 'b':
             //bajaUsuario();
