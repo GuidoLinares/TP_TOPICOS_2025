@@ -204,6 +204,8 @@ bool leerYGenerarArchivo()
             //ponemos todos los registros con el estado A
             miembroTemp.estado = 'A';
 
+            strcpy(miembroTemp.categoria, validarCategoria(miembroTemp.fecha_nacimiento, fechaProcesoGlobal));
+
              //VALIDAR REGISTRO COMPLETO Y MANEJO DE ERRORES DE ESCRITUR
             if(!validarRegistros(&miembroTemp,&fechaProcesoGlobal,motivoError))
             {    
