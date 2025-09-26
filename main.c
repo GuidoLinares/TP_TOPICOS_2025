@@ -2,11 +2,14 @@
 #include "headers.h"
 #include "indice.h"
 
+t_Fecha fechaProcesoGlobal;
+
 int main()
 {
     char op;
-    t_indice miIndice;
     bool procesarTxt = true; 
+    t_indice miIndice;
+    t_reg_indice vecIndice;
 
     puts("====== SISTEMA VIDECLUB CINEFILIA ======");
 
@@ -45,35 +48,37 @@ int main()
         }
     }
     
+
+    indice_cargar(nombreArchBin, &miIndice, &vecIndice,sizeof(s_miembros), cmp);
+
     puts("\n\n====== DESPLEGANDO MENU ======");
     mostrarMenu();
     
     puts("\nIngrese opcion: ");
     op = ingresoYvalidaOpcion('A', 'G');
-
-     switch (op)
-            {
-            case 'a':
-                //altaUsuario();
-                break;
-            case 'b':
-                //bajaUsuario();
-                break;
-            case 'c':
-                //modificarUsuario();
-                break;
-            case 'd':
-                //mostrarInfoMiembro();
-                break;
-            case 'e':
-                //listarMiembros();
-                break;
-            case 'f':
-                //listarMiembrosxPlan();
-                break;
-            case 'g':
-                break;
-            }
+    switch (op)
+    {
+        case 'a':
+            altaUsuario(nombreArchBin,&vecIndice, sizeof(s_miembros),cmp);
+            break;
+        case 'b':
+            //bajaUsuario();
+            break;
+        case 'c':
+            //modificarUsuario();
+            break;
+        case 'd':
+            //mostrarInfoMiembro();
+            break;
+        case 'e':
+            //listarMiembros();
+            break;
+        case 'f':
+            //listarMiembrosxPlan();
+            break;
+        case 'g':
+            break;
+    }
 
     return 0;
 }

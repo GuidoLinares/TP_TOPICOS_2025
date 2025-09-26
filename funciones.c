@@ -1,4 +1,5 @@
 #include "headers.h"
+#include "indice.h"
 
 void mostrarMenu()
 {
@@ -233,7 +234,7 @@ bool leerYGenerarArchivo()
     return true;
 }
     
-int* cmp(const void *dato1, const void *dato2)
+int cmp(const void *dato1, const void *dato2)
 {
     
     long* dat1 = ((long*)dato1);
@@ -246,6 +247,43 @@ int* cmp(const void *dato1, const void *dato2)
     else
         return 0;
 }
+
+/*se obtendrán los datos del teclado, ingresando primero el DNI verificando que
+no exista en el índice y, cuando estén todos los datos ingresados, se realizará
+la validación y consistencia de estos (ídem proceso de generación del
+archivo). Si se detectan errores, se ignora todo lo ingresado. Una vez
+aceptado, grabarlo al final del archivo binario e insertar la información
+correspondiente en el índice*/
+
+void altaUsuario(FILE * nombreArchBin,t_reg_indice vecIndice,size_t tamanyo,int (*cmp(void*,void*)))
+{
+    puts("Ingrese DNI del usuario: ");
+    /*
+    //ingreso dni
+    //verifico que no este en el indice con indice_buscar
+    if -> verdadero, mensaje de error
+    
+    else
+        pido los datos:
+        s_miembros->dni = dni;
+        char apellidoYnombre[60];
+        t_Fecha fecha_nacimiento; 
+        char sexo;
+        t_Fecha fecha_afiliacion; 
+        char categoria[10]; 
+        t_Fecha fecha_ultima_cuota_paga;
+        char estado;
+        char plan[10]
+        char email_tutor[30]
+
+        
+
+
+    */
+
+}
+
+
 
 
 

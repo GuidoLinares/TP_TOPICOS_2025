@@ -110,7 +110,7 @@ bool validarFechaUltimaCuota(t_Fecha fechaCuota, t_Fecha fechaAfiliacion, t_Fech
     return true;
 }
 
-bool validarEmail(char email[]) 
+bool validarEmail(const char*email) 
 {
     int i, at_pos = -1, dot_pos = -1, len = strlen(email);
 

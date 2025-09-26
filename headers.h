@@ -31,7 +31,8 @@ typedef struct
     char email_tutor[30]; //Si el miembro es menor de edad, deberá tener un tutor asociado. pepe@galleta.com Se deberá validar el formato del email.
 }s_miembros;
 
-t_Fecha fechaProcesoGlobal;
+extern t_Fecha fechaProcesoGlobal;
+
 
 ///////////// VALIDACIONES ///////////// 
 long validarDNI(long,long, long);
@@ -41,7 +42,7 @@ bool validarFecha(t_Fecha fecha);
 bool validarFechaNacimiento(t_Fecha fechaNacimiento, t_Fecha fechaProceso);
 bool validarFechaAfiliacion(t_Fecha fechaAfiliacion, t_Fecha fechaProceso, t_Fecha fechaNacimiento);
 bool validarFechaUltimaCuota(t_Fecha fechaCuota, t_Fecha fechaAfiliacion, t_Fecha fechaProceso);
-bool validarEmail(char email[]);
+bool validarEmail(const char*email);
 char* validarCategoria(t_Fecha fechaNacimiento , t_Fecha fechaProceso);
 char* validarPlan();
 char validarOp(char li, char ls);
@@ -62,7 +63,7 @@ bool esBisiesto(int anio);
 ///////////// ARCHIVOS ///////////// 
 bool leerYGenerarArchivo();
 bool validarRegistros(const s_miembros* pMiembro, const t_Fecha* pFechaProceso, char* motivoError);
-int* cmp(const void *dato1, const void *dato2);
+int cmp(const void *dato1, const void *dato2);
 
 
 
