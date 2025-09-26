@@ -113,6 +113,12 @@ void indice_vaciar(t_indice* indice)
 int indice_cargar(const char* path, t_indice* indice, void *vreg_ind, size_t tamanyo, int (*cmp)(const void *, const void *))
 {
  
+  
+
+
+
+
+
 }
 
 

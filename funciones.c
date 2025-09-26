@@ -203,9 +203,10 @@ bool leerYGenerarArchivo()
         {
              //VALIDAR REGISTRO COMPLETO Y MANEJO DE ERRORES DE ESCRITUR
             if(!validarRegistros(&miembroTemp,&fechaProcesoGlobal,motivoError))
+            {    
                 if(!grabarArchError(lineaLogError, motivoError, error))
                     printf("Error al grabar el archivo %s",nombreArchivoError);
-
+            }
             else
             {
                 if (!grabarArchBin(&miembroTemp, bin))

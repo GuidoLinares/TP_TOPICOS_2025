@@ -18,8 +18,8 @@ int main()
         printf("FALLO LA CREACION DE ARCHIVOS");
     else
     {
+
         puts("\n\n====== DESPLEGANDO MENU ======");
-    
         mostrarMenu();
         
         puts("Ingrese opcion: ");
@@ -28,7 +28,7 @@ int main()
         switch (op)
         {
         case 'a':
-            //altaUsuario();
+            altaUsuario();
             break;
         case 'b':
             //bajaUsuario();
@@ -51,7 +51,6 @@ int main()
 
     }
 
-    
     return 0;
 }
 
