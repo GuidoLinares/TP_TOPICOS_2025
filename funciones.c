@@ -237,51 +237,278 @@ bool leerYGenerarArchivo()
 int cmp(const void *dato1, const void *dato2)
 {
     
-    long* dat1 = ((long*)dato1);
-    long* dat2 = ((long*)dato2);
+    t_reg_indice* dat1 = (const t_reg_indice*)dato1;
+    t_reg_indice* dat2 = (const t_reg_indice*)dato2;
 
-    if(dat1 < dat2)
+    if(dat1->dni < dat2->dni)
         return -1;
-    else if(dat1 > dat2)
+    else if( dat1->dni  > dat2->dni)
         return 1;
     else
         return 0;
 }
 
-/*se obtendrán los datos del teclado, ingresando primero el DNI verificando que
-no exista en el índice y, cuando estén todos los datos ingresados, se realizará
-la validación y consistencia de estos (ídem proceso de generación del
-archivo). Si se detectan errores, se ignora todo lo ingresado. Una vez
-aceptado, grabarlo al final del archivo binario e insertar la información
-correspondiente en el índice*/
-
-void altaUsuario(FILE * nombreArchBin,t_reg_indice vecIndice,size_t tamanyo,int (*cmp(void*,void*)))
+void altaUsuario(const char *nombre_archivo_bin, t_indice *indice)
 {
-    puts("Ingrese DNI del usuario: ");
-    /*
-    //ingreso dni
-    //verifico que no este en el indice con indice_buscar
-    if -> verdadero, mensaje de error
-    
-    else
-        pido los datos:
-        s_miembros->dni = dni;
-        char apellidoYnombre[60];
-        t_Fecha fecha_nacimiento; 
-        char sexo;
-        t_Fecha fecha_afiliacion; 
-        char categoria[10]; 
-        t_Fecha fecha_ultima_cuota_paga;
-        char estado;
-        char plan[10]
-        char email_tutor[30]
+    FILE *pf = fopen(nombre_archivo_bin, "r+b");
+    if(!pf)
+    {
 
+        pf = fopen(nombre_archivo_bin, "w+b");
+    }
+
+    if(!pf)
+    {
+        printf("Error fatal: No se pudo abrir/crear el archivo binario %s\n", nombre_archivo_bin);
+        return; 
+    }
+
+    s_miembros nuevoMiembro;
+    t_reg_indice regIndice;
+    long posArchivo;
+
+    printf("\n--- Alta de Nuevo Miembro ---\n");
+    printf("Ingresar DNI: ");
+    scanf("%ld", &nuevoMiembro.DNI);
+
+
+    regIndice.dni = nuevoMiembro.DNI;
+
+
+    if(indice_buscar(indice, &regIndice, indice->cantidad_elementos_actual, sizeof(t_reg_indice), cmp) != NO_EXISTE)
+    {
+        printf("\nERROR: El miembro con DNI %ld ya existe.\n", nuevoMiembro.DNI);
+        fclose(pf);
+        return;
+    }
+
+
+    printf("Nombre y apellido: ");
+    fflush(stdin);
+
+    fgets(nuevoMiembro.apellidoYnombre, sizeof(nuevoMiembro.apellidoYnombre), stdin);
+    nuevoMiembro.apellidoYnombre[strcspn(nuevoMiembro.apellidoYnombre, "\n")] = 0; 
+
+
+    normalizarCadena(nuevoMiembro.apellidoYnombre);
+    printf("Nombre normalizado: %s\n", nuevoMiembro.apellidoYnombre);
+
+    printf("Fecha de nacimiento (dd mm aaaa): ");
+    scanf("%d %d %d", &nuevoMiembro.fecha_nacimiento.dia, &nuevoMiembro.fecha_nacimiento.mes, &nuevoMiembro.fecha_nacimiento.anio);
+
+    printf("Sexo (M/F): ");
+    fflush(stdin);
+    scanf(" %c", &nuevoMiembro.sexo);
+    nuevoMiembro.sexo = toupper(nuevoMiembro.sexo);
+
+    printf("Fecha de afiliacion (dd mm aaaa): ");
+    scanf("%d %d %d", &nuevoMiembro.fecha_afiliacion.dia, &nuevoMiembro.fecha_afiliacion.mes, &nuevoMiembro.fecha_afiliacion.anio);
+
+    printf("Fecha ultima cuota paga (dd mm aaaa): ");
+    scanf("%d %d %d", &nuevoMiembro.fecha_ultima_cuota_paga.dia, &nuevoMiembro.fecha_ultima_cuota_paga.mes, &nuevoMiembro.fecha_ultima_cuota_paga.anio);
+
+    printf("Plan (BASIC, PREMIUM, VIP, FAMILY): ");
+    fflush(stdin);
+    scanf("%s", nuevoMiembro.plan);
+    // (Deberías normalizar el plan a mayúsculas)
+
+    // El estado se crea con 'A' por defecto (según TP)
+    nuevoMiembro.estado = 'A';
+
+    // La categoría se calcula (según TP)
+    strcpy(nuevoMiembro.categoria, validarCategoria(nuevoMiembro.fecha_nacimiento, fechaProcesoGlobal));
+    printf("Categoria calculada: %s\n", nuevoMiembro.categoria);
+
+    // Limpiamos el email del tutor
+    strcpy(nuevoMiembro.email_tutor, "");
+
+    // Si es menor, pedimos email (según headers.h)
+    if (esMenorDeEdad(nuevoMiembro.fecha_nacimiento, fechaProcesoGlobal))
+    {
+        printf("Email tutor (obligatorio para menores): ");
+        fflush(stdin);
+        scanf("%s", nuevoMiembro.email_tutor);
+    }
+
+    // --- VALIDACION FINAL ---
+    char motivoError[100];
+    // Usamos la función de headers.h y la variable global
+    if(!validarRegistros(&nuevoMiembro, &fechaProcesoGlobal, motivoError))
+    {
+        printf("\nDatos incorrectos: %s. Alta cancelada.\n", motivoError);
+        fclose(pf);
+        return;
+    }
+
+    fseek(pf, 0, SEEK_END);
+    posArchivo = ftell(pf) / sizeof(s_miembros); 
+    fwrite(&nuevoMiembro, sizeof(s_miembros), 1, pf); 
+
+
+    regIndice.dni = nuevoMiembro.DNI; 
+    regIndice.nro_reg = posArchivo;     
+    
+
+    indice_insertar(indice, &regIndice, sizeof(t_reg_indice), cmp);
+
+    printf("\nMiembro con DNI %ld agregado exitosamente en la posicion %ld.\n", nuevoMiembro.DNI, posArchivo);
+
+    fclose(pf);
+}
+
+void bajaUsuario(const char *nombre_archivo_bin, t_indice *indice)
+{
+    FILE *pf = fopen(nombre_archivo_bin, "r+b"); // Necesitamos leer y escribir
+    if (!pf)
+    {
+        printf("\nError al abrir el archivo binario %s.\n", nombre_archivo_bin);
+        return;
+    }
+
+    long dni_baja;
+    printf("\n--- Baja de Miembro ---\n");
+    printf("Ingresar el DNI del miembro a dar de baja: ");
+    scanf("%ld", &dni_baja);
+
+    t_reg_indice reg_buscar;
+    reg_buscar.dni = dni_baja;
+
+
+    int pos_indice = indice_buscar(indice, &reg_buscar, indice->cantidad_elementos_actual, sizeof(t_reg_indice), cmp);
+
+    if (pos_indice == NO_EXISTE)
+    {
+        printf("\nNo existe un miembro con el DNI %ld.\n", dni_baja);
+        fclose(pf);
+        return;
+    }
+
+
+    t_reg_indice *vindice_array = (t_reg_indice *)indice->vindice;
+    long pos_registro_archivo = vindice_array[pos_indice].nro_reg;
+
+
+    fseek(pf, pos_registro_archivo * sizeof(s_miembros), SEEK_SET);
+
+    s_miembros miembro; 
+    if (fread(&miembro, sizeof(s_miembros), 1, pf) != 1)
+    {
+        printf("\nError al leer el registro %ld del archivo.\n", pos_registro_archivo);
+        fclose(pf);
+        return;
+    }
+
+
+    if (miembro.estado == 'B')
+    {
+        printf("\nEl miembro con DNI %ld ya se encontraba dado de baja.\n", dni_baja);
+    }
+    else
+    {
+
+        miembro.estado = 'B';
+
+        fseek(pf, pos_registro_archivo * sizeof(s_miembros), SEEK_SET);
+        fwrite(&miembro, sizeof(s_miembros), 1, pf);
+        
+        printf("\nMiembro con DNI %ld dado de baja correctamente.\n", dni_baja);
+    }
+
+    indice_eliminar(indice, &reg_buscar, sizeof(t_reg_indice), cmp);
+
+    fclose(pf);
+}
+
+void modificarUsuario(const char *nombre_archivo_bin, t_indice *indice)
+{
+    char* vOpc[8] = {
+    "1- Apellido y Nombre",
+    "2- Fecha de nacimiento",
+    "3- Sexo",
+    "4- Fecha de afiliacion",
+    "5- Fecha de ultima cuota paga",
+    "6- Plan",
+    "7- Email del tutor",
+    "0- Cancelar y Salir"
+};
+
+    FILE* pf;
+
+    pf = fopen(nombre_archivo_bin, "r+b");
+    if (!pf)
+    {
+        printf("\nError al abrir el archivo binario %s.\n", nombre_archivo_bin);
+        return;
+    }
+
+
+    long dni_modif;
+    printf("Ingresar el DNI del miembro a modificar: ");
+    scanf("%ld", &dni_modif);
+
+    t_reg_indice reg_modif;
+    reg_modif.dni = dni_modif;
+
+    int pos_indice = indice_buscar(indice,&reg_modif, indice->cantidad_elementos_actual,sizeof(t_reg_indice),cmp);
+
+    if (pos_indice == NO_EXISTE)
+        {
+            printf("\nNo existe un miembro con el DNI %ld.\n", dni_modif);
+            fclose(pf);
+            return;
+        }
+
+    t_reg_indice *vindice_array = (t_reg_indice *)indice->vindice;
+    long pos_registro_archivo = vindice_array[pos_indice].nro_reg;
+
+    fseek(pf, pos_registro_archivo * sizeof(s_miembros), SEEK_SET);
+
+    s_miembros miembro; 
+    if (fread(&miembro, sizeof(s_miembros), 1, pf) != 1)
+    {
+        printf("\nError al leer el registro %ld del archivo.\n", pos_registro_archivo);
+        fclose(pf);
+        return;
+    }
+
+    puts("Que dato desea modificar del usuario? \n");
+    for (int i = 0; i < 10; i++)
+    {
+        printf("%s\n", vOpc[i]);
+    }
+     int op = validar2(1,10);
+    do
+    {
+      
+       
+        /*
+        switch (op) // busco segun opcion, en cada caso del switch hago el pedido de nuevo dato y actualizo
+        {
+        case constant expression:
+
+            break;
+            default:
+                break;
+            }
+        */
         
 
-
-    */
+    } while (op != 0);
+    
+    fclose(pf);
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -62,10 +62,10 @@ int main()
             altaUsuario(nombreArchBin,&vecIndice, sizeof(s_miembros),cmp);
             break;
         case 'b':
-            //bajaUsuario();
+            bajaUsuario(nombreArchBin,&vecIndice);
             break;
         case 'c':
-            //modificarUsuario();
+            modificarUsuario(nombreArchBin,&vecIndice);
             break;
         case 'd':
             //mostrarInfoMiembro();
