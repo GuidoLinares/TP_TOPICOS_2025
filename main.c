@@ -88,7 +88,10 @@ int main()
         "\tD) Mostrar informacion de un miembro",
         "\tE) Listado de miembros ordenados por DNI",
         "\tF) Listado de todos los miembros agrupados por plan",
-        "\tG) Salir"
+        "\tG) Listado de todos los miembros inactivos (dados de baja)",
+        "\tH) Buscar miembros por rangos de edad",
+        "\tI) Mostrar EstadÃ­sticas Simples",
+        "\tJ) Salir"
     };
 
     int tam_menu_binario = sizeof(menu_binario) / sizeof(menu_binario[0]);
@@ -96,9 +99,9 @@ int main()
 
     do
     {
-        system("cls");  /// Limpia pantalla cada vez que vuelve al menú principal
+        system("cls");  /// Limpia pantalla cada vez que vuelve al menï¿½ principal
         mostrar_menu(menu_binario, tam_menu_binario);
-        opcion_menu_binario = capturar_opcion('A', 'G');
+        opcion_menu_binario = capturar_opcion('A', 'J');
 
         switch (opcion_menu_binario)
         {
@@ -134,21 +137,32 @@ int main()
 
         case 'G':
             system("cls");
+            mostrar_miembros_inactivos(arch_bin);
+            break;
+
+        case 'H':
+            system("cls");
+            //mostrar_miembros_rango_edad(&indice, arch_bin);
+            break;
+
+        case 'J':
+            system("cls");
             puts("\nSaliendo del programa...\n");
             break;
+
 
         default:
             puts("\nOpcion invalida. Intente nuevamente.\n");
         }
 
-        if (opcion_menu_binario != 'G')
+        if (opcion_menu_binario != 'J')
         {
             puts("\nPresione DOBLE ENTER para volver al menu principal...");
             limpiar_buffer();
             getchar();
         }
 
-    } while (opcion_menu_binario != 'G');
+    } while (opcion_menu_binario != 'J');
 
     puts("Liberando memoria del indice...\n");
     free(indice.vindice);

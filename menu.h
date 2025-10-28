@@ -16,6 +16,8 @@ void listar_miembros_dni(const t_indice *indice, const char *nombre_archivo_bin)
 void listar_miembros_plan(const t_indice *indice, const char *nombre_archivo_bin);
 int cmp_plan_dni(const void *a, const void *b);
 void modificar_miembro(const char *arch_bin, t_indice *pIndice, t_fecha *fecha_proceso, int (*cmp)(const void*, const void*));
+void mostrar_miembros_inactivos(const char* arch_bin);
+
 
 
 #endif // MENU_H_INCLUDED

@@ -12,18 +12,18 @@
 #define ERROR 0
 #define NO_EXISTE -1
 
- typedef struct
- {
-    unsigned nro_reg;
-    long dni;
- }t_reg_indice;
+typedef struct
+{
+   unsigned nro_reg;
+   long dni;
+}t_reg_indice;
 
- typedef struct
- {
-    void *vindice;
-    unsigned cantidad_elementos_actual;
-    unsigned cantidad_elementos_maxima;
- }t_indice;
+typedef struct
+{
+void *vindice;
+unsigned cantidad_elementos_actual;
+unsigned cantidad_elementos_maxima;
+}t_indice;
 
 void indice_crear(t_indice *indice, size_t nmemb, size_t tamanyo);
 void indice_redimensionar(t_indice *indice, size_t nmemb, size_t tamanyo);

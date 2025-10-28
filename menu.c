@@ -42,7 +42,7 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     printf("Ingresar DNI: ");
     scanf("%ld", &reg_buscar.dni);
 
-    /// VERIFICAR EXISTENCIA EN EL ÍNDICE
+    /// VERIFICAR EXISTENCIA EN EL ï¿½NDICE
     if(indice_buscar(indice, &reg_buscar, 0, sizeof(t_reg_indice), cmp) != NO_EXISTE)
     {
         printf("\nEl miembro con DNI %ld ya existe.\n", reg_buscar.dni);
@@ -53,7 +53,7 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     /// SI NO EXISTE, CARGAR DATOS
     nuevo.dni = reg_buscar.dni;
 
-    // Limpiar buffer después del primer scanf
+    // Limpiar buffer despuï¿½s del primer scanf
     while(getchar() != '\n');
 
     printf("Nombre y apellido: ");
@@ -63,19 +63,19 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     printf("Fecha de nacimiento (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_nac.dia, &nuevo.fecha_nac.mes, &nuevo.fecha_nac.anio);
 
-    printf("Fecha de afiliación (dd/mm/aaaa): ");
+    printf("Fecha de afiliaciï¿½n (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_afi.dia, &nuevo.fecha_afi.mes, &nuevo.fecha_afi.anio);
 
     printf("Sexo (M/F): ");
     while(getchar() != '\n');
     scanf("%c", &nuevo.sexo);
-    nuevo.sexo = toupper(nuevo.sexo); // Convertir a mayúscula
+    nuevo.sexo = toupper(nuevo.sexo); // Convertir a mayï¿½scula
 
     printf("Categoria (ADULTO/MENOR): ");
     while(getchar() != '\n');
     fgets(nuevo.categoria, sizeof(nuevo.categoria), stdin);
     nuevo.categoria[strcspn(nuevo.categoria, "\n")] = '\0';
-    // Convertir a mayúsculas
+    // Convertir a mayï¿½sculas
     for(int i = 0; nuevo.categoria[i]; i++) {
         nuevo.categoria[i] = toupper(nuevo.categoria[i]);
     }
@@ -89,7 +89,7 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     while(getchar() != '\n');
     fgets(nuevo.plan, sizeof(nuevo.plan), stdin);
     nuevo.plan[strcspn(nuevo.plan, "\n")] = '\0';
-    // Convertir a mayúsculas
+    // Convertir a mayï¿½sculas
     for(int i = 0; nuevo.plan[i]; i++) {
         nuevo.plan[i] = toupper(nuevo.plan[i]);
     }
@@ -121,7 +121,7 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     pos = ftell(pf);
     fwrite(&nuevo, sizeof(t_miembro), 1, pf);
 
-    /// INSERTAR EN EL ÍNDICE
+    /// INSERTAR EN EL ï¿½NDICE
     reg.dni = nuevo.dni;
     reg.nro_reg = pos / sizeof(t_miembro);
     indice_insertar(indice, &reg, sizeof(t_reg_indice), cmp);
@@ -146,7 +146,7 @@ void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(c
     t_reg_indice reg_buscar;
     reg_buscar.dni = dni_baja;
 
-    // Buscar en el índice
+    // Buscar en el ï¿½ndice
     int pos_indice = indice_buscar(indice, &reg_buscar, 0, sizeof(t_reg_indice), cmp);
 
     if (pos_indice == NO_EXISTE)
@@ -156,7 +156,7 @@ void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(c
         return;
     }
 
-    // Acceder al índice para obtener la posición del registro en el archivo
+    // Acceder al ï¿½ndice para obtener la posiciï¿½n del registro en el archivo
     t_reg_indice *vindice = (t_reg_indice *)indice->vindice;
     long pos_registro = vindice[pos_indice].nro_reg;
 
@@ -177,7 +177,7 @@ void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(c
     fseek(pf, pos_registro * sizeof(t_miembro), SEEK_SET);
     fwrite(&miembro, sizeof(t_miembro), 1, pf);
 
-    // Eliminar del índice
+    // Eliminar del ï¿½ndice
     indice_eliminar(indice, &reg_buscar, sizeof(t_reg_indice), cmp);
 
     printf("\nMiembro con DNI %ld dado de baja correctamente.\n", dni_baja);
@@ -197,7 +197,7 @@ void mostrar_miembro(const t_indice *indice, const char *nombre_archivo_bin, int
     t_reg_indice reg_buscar;
     reg_buscar.dni = dni_buscar;
 
-    // Buscar en el índice
+    // Buscar en el ï¿½ndice
     int pos_indice = indice_buscar(indice, &reg_buscar, 0, sizeof(t_reg_indice), cmp);
 
     if (pos_indice == NO_EXISTE)
@@ -214,11 +214,11 @@ void mostrar_miembro(const t_indice *indice, const char *nombre_archivo_bin, int
         return;
     }
 
-    // Acceder al índice para obtener la posición del registro en el archivo
+    // Acceder al ï¿½ndice para obtener la posiciï¿½n del registro en el archivo
     t_reg_indice *vindice = (t_reg_indice *)indice->vindice;
     long pos_registro = vindice[pos_indice].nro_reg;
 
-    // Ir a la posición y leer
+    // Ir a la posiciï¿½n y leer
     fseek(pf, pos_registro * sizeof(t_miembro), SEEK_SET);
 
     t_miembro miembro;
@@ -231,7 +231,7 @@ void mostrar_miembro(const t_indice *indice, const char *nombre_archivo_bin, int
 
     fclose(pf); // Cerramos el archivo
 
-    // Mostrar toda la información
+    // Mostrar toda la informaciï¿½n
     printf("\n--- Datos del Miembro ---\n");
     printf("DNI: \t\t\t%ld\n", miembro.dni);
     printf("Nombre y Apellido: \t%s\n", miembro.apeynom);
@@ -252,7 +252,7 @@ void mostrar_miembro(const t_indice *indice, const char *nombre_archivo_bin, int
 void listar_miembros_dni(const t_indice *indice, const char *nombre_archivo_bin)
 {
     puts("\n--- Listado de Miembros Activos (Ordenados por DNI) ---\n");
-    // Verificamos si el índice está vacío
+    // Verificamos si el ï¿½ndice estï¿½ vacï¿½o
     if (indice_vacio(indice))
     {
         puts("No hay miembros activos para listar.\n");
@@ -267,7 +267,7 @@ void listar_miembros_dni(const t_indice *indice, const char *nombre_archivo_bin)
         return;
     }
 
-    // Recorremos el array del índice (que ya está ordenado)
+    // Recorremos el array del ï¿½ndice (que ya estï¿½ ordenado)
     t_reg_indice *vindice = (t_reg_indice *)indice->vindice;
     t_miembro miembro;
     long pos_bytes;
@@ -277,10 +277,10 @@ void listar_miembros_dni(const t_indice *indice, const char *nombre_archivo_bin)
 
     for (int i = 0; i < indice->cantidad_elementos_actual; i++)
     {
-        // Obtenemos la posición en el archivo del registro actual del índice
+        // Obtenemos la posiciï¿½n en el archivo del registro actual del ï¿½ndice
         pos_bytes = vindice[i].nro_reg * sizeof(t_miembro);
 
-        // Vamos a esa posición en el archivo
+        // Vamos a esa posiciï¿½n en el archivo
         fseek(pf, pos_bytes, SEEK_SET);
 
         // Leemos el miembro completo
@@ -329,32 +329,32 @@ void listar_miembros_plan(const t_indice *indice, const char *nombre_archivo_bin
         return;
     }
 
-    // 4. Leer todos los miembros activos al array usando el índice
+    // 4. Leer todos los miembros activos al array usando el ï¿½ndice
     t_reg_indice *vindice = (t_reg_indice *)indice->vindice;
     long pos_bytes;
-    int miembros_cargados = 0; // Contador de miembros realmente leídos y válidos
+    int miembros_cargados = 0; // Contador de miembros realmente leï¿½dos y vï¿½lidos
     for (int i = 0; i < num_activos; i++)
     {
         pos_bytes = vindice[i].nro_reg * sizeof(t_miembro);
         fseek(pf, pos_bytes, SEEK_SET);
-        // Intentamos leer en la posición 'miembros_cargados' del array
+        // Intentamos leer en la posiciï¿½n 'miembros_cargados' del array
         if (fread(&miembros_activos[miembros_cargados], sizeof(t_miembro), 1, pf) == 1)
         {
-            // Verificamos si realmente está activo (aunque el índice debería ser correcto)
+            // Verificamos si realmente estï¿½ activo (aunque el ï¿½ndice deberï¿½a ser correcto)
             if (miembros_activos[miembros_cargados].estado == 'A')
             {
-                miembros_cargados++; // Solo incrementamos si leímos y está activo
+                miembros_cargados++; // Solo incrementamos si leï¿½mos y estï¿½ activo
             }
         }
     }
     fclose(pf);
 
-    // Actualizamos num_activos por si algún registro no se pudo leer o estaba inactivo
+    // Actualizamos num_activos por si algï¿½n registro no se pudo leer o estaba inactivo
     num_activos = miembros_cargados;
 
     if (num_activos == 0)
     {
-        printf("No se encontraron miembros activos válidos.\n");
+        printf("No se encontraron miembros activos vï¿½lidos.\n");
         free(miembros_activos);
         return;
     }
@@ -371,7 +371,7 @@ void listar_miembros_plan(const t_indice *indice, const char *nombre_archivo_bin
     char plan_actual[11] = ""; // Para rastrear cambios de plan
     for (int i = 0; i < num_activos; i++)
     {
-        // Verificar si cambió el plan para imprimir un nuevo encabezado
+        // Verificar si cambiï¿½ el plan para imprimir un nuevo encabezado
         if (strcmp(miembros_activos[i].plan, plan_actual) != 0)
         {
             strcpy(plan_actual, miembros_activos[i].plan);
@@ -402,7 +402,7 @@ int cmp_plan_dni(const void *a, const void *b)
 
     if (cmp_plan != 0)
     {
-        // Los planes son diferentes, devolver el resultado de la comparación de planes
+        // Los planes son diferentes, devolver el resultado de la comparaciï¿½n de planes
         return cmp_plan;
     }
     else
@@ -410,7 +410,7 @@ int cmp_plan_dni(const void *a, const void *b)
         // 2. Los planes son iguales, comparar por DNI
         if (m1->dni < m2->dni) return -1;
         if (m1->dni > m2->dni) return 1;
-        return 0; // Los DNI también son iguales (no debería pasar con DNI únicos)
+        return 0; // Los DNI tambiï¿½n son iguales (no deberï¿½a pasar con DNI ï¿½nicos)
     }
 }
 
@@ -573,3 +573,41 @@ void modificar_miembro(const char *arch_bin, t_indice *pIndice, t_fecha *fecha_p
 
     fclose(fp);
 }
+
+void mostrar_miembros_inactivos(const char* arch_bin)
+{
+    t_miembro miembro;
+
+    FILE*fp = fopen(arch_bin, "rb");
+    if (!fp)
+    {
+        puts("No se pudo abrir el archivo");
+        exit (-1);
+    }
+
+    puts("------LISTADO DE MIEMBROS DADOS DE BAJA------");
+    while (fread(&miembro, sizeof(t_miembro),1,fp) == 1)
+    {   
+
+        if (miembro.estado == 'B')
+        {
+            printf("NOMBRE Y APELLIDO: %s",miembro.apeynom);
+            printf("CATEGORIA: %s",miembro.categoria);
+            printf("DNI: %ld",miembro.dni);
+            printf("EMAIL TUTOR: %s",miembro.emailTutor);
+            printf("FECHA AFILIACION: %d-%d-%d",miembro.fecha_afi.dia,miembro.fecha_afi.mes,miembro.fecha_afi.anio);
+            printf("FECHA NACIMIENTO: %d-%d-%d",miembro.fecha_nac.dia,miembro.fecha_nac.mes,miembro.fecha_nac.anio);
+            printf("FECHA ULTIMA CUOTA: %d-%d-%d",miembro.fecha_ult_cuo.dia,miembro.fecha_ult_cuo.mes,miembro.fecha_ult_cuo.anio);
+            printf("ESTADO: %c",miembro.estado);
+            printf("PLAN: %s",miembro.plan);
+            printf("SEXO: %c",miembro.sexo);
+        }
+        
+    }
+    fclose(fp);
+}
+
+
+
+
+
