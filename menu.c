@@ -586,26 +586,31 @@ void mostrar_miembros_inactivos(const char* arch_bin)
     }
 
     puts("------LISTADO DE MIEMBROS DADOS DE BAJA------");
-    while (fread(&miembro, sizeof(t_miembro),1,fp) == 1)
-    {   
+    while (fread(&miembro, sizeof(t_miembro),1,fp) != 1)
+    {
 
         if (miembro.estado == 'B')
         {
-            printf("NOMBRE Y APELLIDO: %s",miembro.apeynom);
-            printf("CATEGORIA: %s",miembro.categoria);
-            printf("DNI: %ld",miembro.dni);
-            printf("EMAIL TUTOR: %s",miembro.emailTutor);
-            printf("FECHA AFILIACION: %d-%d-%d",miembro.fecha_afi.dia,miembro.fecha_afi.mes,miembro.fecha_afi.anio);
-            printf("FECHA NACIMIENTO: %d-%d-%d",miembro.fecha_nac.dia,miembro.fecha_nac.mes,miembro.fecha_nac.anio);
-            printf("FECHA ULTIMA CUOTA: %d-%d-%d",miembro.fecha_ult_cuo.dia,miembro.fecha_ult_cuo.mes,miembro.fecha_ult_cuo.anio);
-            printf("ESTADO: %c",miembro.estado);
-            printf("PLAN: %s",miembro.plan);
-            printf("SEXO: %c",miembro.sexo);
+            printf("NOMBRE Y APELLIDO: %s\n",miembro.apeynom);
+            printf("CATEGORIA: %s\n",miembro.categoria);
+            printf("DNI: %ld\n",miembro.dni);
+            printf("EMAIL TUTOR: %s\n",miembro.emailTutor);
+            printf("FECHA AFILIACION: %d-%d-%d\n",miembro.fecha_afi.dia,miembro.fecha_afi.mes,miembro.fecha_afi.anio);
+            printf("FECHA NACIMIENTO: %d-%d-%d\n",miembro.fecha_nac.dia,miembro.fecha_nac.mes,miembro.fecha_nac.anio);
+            printf("FECHA ULTIMA CUOTA: %d-%d-%d\n",miembro.fecha_ult_cuo.dia,miembro.fecha_ult_cuo.mes,miembro.fecha_ult_cuo.anio);
+            printf("ESTADO: %c\n",miembro.estado);
+            printf("PLAN: %s\n",miembro.plan);
+            printf("SEXO: %c\n",miembro.sexo);
         }
-        
+
     }
     fclose(fp);
 }
+
+
+
+
+
 
 
 

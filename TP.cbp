@@ -46,9 +46,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="menu.h" />
-		<Unit filename="miembros.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Unit filename="miembros.h" />
 		<Unit filename="procesar_txt.c">
 			<Option compilerVar="CC" />
