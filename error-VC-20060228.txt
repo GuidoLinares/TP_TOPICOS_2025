@@ -1,0 +1,8 @@
+Fecha Afiliacion: No puede ser posterior a la fecha de proceso|30123456|Perez, Juan Carlos|15/05/1985|M|10/01/2020|ADULTO|01/10/2025|A|PREMIUM|
+Fecha Nacimiento: El miembro debe tener al menos 10 anios|50987654|Gomez, Maria Laura|20/08/2010|F|05/03/2022|MENOR|15/09/2025|A|FAMILY|tutor.gomez@mail.com
+Fecha Nacimiento: El miembro debe tener al menos 10 anios|45111222|Rodriguez, Ana|23/10/2007|F|11/11/2024|ADULTO|05/10/2025|A|BASIC|
+Fecha Afiliacion: No puede ser posterior a la fecha de proceso|10555666|Fernandez, Ricardo Alberto|01/02/1955|M|15/07/2018|ADULTO|20/10/2025|A|VIP|
+Fecha Nacimiento: El miembro debe tener al menos 10 anios|52333444|Lopez, Sofia|10/12/2013|F|01/01/2025|MENOR|01/09/2025|A|BASIC|familia.lopez@email.net
+DNI: Fuera de rango (1000001-99999999)|12345|Error, Dni Corto|10/10/1990|M|01/01/2023|ADULTO|01/01/2024|A|BASIC|
+Fecha Nacimiento: El miembro debe tener al menos 10 anios|55666777|Problema, Edad Insuficiente|01/01/2017|F|01/01/2025|MENOR|01/05/2025|A|FAMILY|papa.problema@mail.com
+Fecha Nacimiento: El miembro debe tener al menos 10 anios|51222333|Faltante, Email Tutor|15/06/2009|M|10/10/2023|MENOR|10/08/2025|A|PREMIUM|

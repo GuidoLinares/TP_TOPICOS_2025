@@ -11,7 +11,7 @@ void indice_crear(t_indice *indice, size_t nmemb, size_t tamanyo)
     }
     else
     {
-        // Inicializamos la estructura vacía.
+        // Inicializamos la estructura vacï¿½a.
         indice->cantidad_elementos_actual = 0;
         indice->cantidad_elementos_maxima = CANTIDAD_ELEMENTOS;
     }
@@ -23,28 +23,28 @@ void indice_redimensionar(t_indice *indice, size_t nmemb, size_t tamanyo)
     void *nuevo_puntero = realloc(indice->vindice, nuevo_tam_bytes);
     if (nuevo_puntero != NULL)
     {
-        // Éxito: Actualizamos el puntero y el tamaño máximo.
+        // ï¿½xito: Actualizamos el puntero y el tamaï¿½o mï¿½ximo.
         indice->vindice = nuevo_puntero;
         indice->cantidad_elementos_maxima = nmemb;
     }
-    // Si falló (nuevo_puntero == NULL)
-    // La función que llamó (indice_insertar) fallará al intentar insertar.
+    // Si fallï¿½ (nuevo_puntero == NULL)
+    // La funciï¿½n que llamï¿½ (indice_insertar) fallarï¿½ al intentar insertar.
 }
 
 int indice_vacio(const t_indice *indice)
 {
     if (indice->cantidad_elementos_actual == 0)
-        return OK; // OK está definido como 1 en indice.h
+        return OK; // OK estï¿½ definido como 1 en indice.h
     else
-        return ERROR; // ERROR está definido como 0 en indice.h
+        return ERROR; // ERROR estï¿½ definido como 0 en indice.h
 }
 
 int indice_lleno(const t_indice *indice)
 {
     if (indice->cantidad_elementos_actual == indice->cantidad_elementos_maxima)
-        return OK; // OK está definido como 1 en indice.h
+        return OK; // OK estï¿½ definido como 1 en indice.h
     else
-        return ERROR; // ERROR está definido como 0 en indice.h
+        return ERROR; // ERROR estï¿½ definido como 0 en indice.h
 }
 
 void indice_vaciar(t_indice* indice)
@@ -59,7 +59,7 @@ int indice_buscar(const t_indice *indice, const void *registro, size_t nmemb, si
     char *p_base = (char*)indice->vindice;
     while (izq <= der)
     {
-        // 1. Calculamos la posición media
+        // 1. Calculamos la posiciï¿½n media
         int medio = izq + (der - izq) / 2;
         // 2. Obtenemos un puntero al elemento del medio
         void *elem_medio = p_base + (medio * tamanyo);
@@ -84,11 +84,11 @@ int indice_eliminar(t_indice *indice, const void *registro, size_t tamanyo, int 
     int elementos_a_mover = indice->cantidad_elementos_actual - pos - 1;
     if (elementos_a_mover > 0)
     {
-        // Calculamos la dirección de "destino" (la posición 'pos' que borramos)
+        // Calculamos la direcciï¿½n de "destino" (la posiciï¿½n 'pos' que borramos)
         void *destino = p_base + (pos * tamanyo);
-        // Calculamos la dirección de "origen" (la posición 'pos + 1')
+        // Calculamos la direcciï¿½n de "origen" (la posiciï¿½n 'pos + 1')
         void *origen = p_base + ((pos + 1) * tamanyo);
-        // Calculamos cuántos bytes totales hay que mover
+        // Calculamos cuï¿½ntos bytes totales hay que mover
         size_t bytes_a_mover = elementos_a_mover * tamanyo;
 
         memmove(destino, origen, bytes_a_mover);
@@ -99,33 +99,33 @@ int indice_eliminar(t_indice *indice, const void *registro, size_t tamanyo, int 
 
 int indice_insertar(t_indice *indice, const void *registro, size_t tamanyo, int (*cmp) (const void *, const void *))
 {
-    // Verificar si el array está lleno y redimensionar si es necesario ---
+    // Verificar si el array estï¿½ lleno y redimensionar si es necesario ---
     if (indice_lleno(indice))
     {
         unsigned nueva_maxima = (unsigned)(indice->cantidad_elementos_maxima * INCREMENTO);
-        // Si el índice estaba vacío (0 * 1.3 = 0), le damos el tamaño base
+        // Si el ï¿½ndice estaba vacï¿½o (0 * 1.3 = 0), le damos el tamaï¿½o base
         if (nueva_maxima == 0)
             nueva_maxima = CANTIDAD_ELEMENTOS;
 
         indice_redimensionar(indice, nueva_maxima, tamanyo);
-        // Si después de intentar redimensionar sigue lleno, realloc() falló.
+        // Si despuï¿½s de intentar redimensionar sigue lleno, realloc() fallï¿½.
         if (indice_lleno(indice))
-            return ERROR; // No hay más memoria, no se puede insertar.
+            return ERROR; // No hay mï¿½s memoria, no se puede insertar.
     }
 
-    // Buscar la posición de inserción
+    // Buscar la posiciï¿½n de inserciï¿½n
     char *p_base = (char*)indice->vindice;
-    int pos = 0; // Posición de inserción
-    // Buscamos la posición 'pos' donde el elemento en esa posición sea MAYOR que el registro que queremos insertar.
+    int pos = 0; // Posiciï¿½n de inserciï¿½n
+    // Buscamos la posiciï¿½n 'pos' donde el elemento en esa posiciï¿½n sea MAYOR que el registro que queremos insertar.
     while (pos < indice->cantidad_elementos_actual)
     {
         void *elem_actual = p_base + (pos * tamanyo);
         // elem_actual > registro
         if (cmp(elem_actual, registro) > 0)
-            break; // Encontramos la posición. Hay que insertar aquí.
+            break; // Encontramos la posiciï¿½n. Hay que insertar aquï¿½.
         pos++;
     }
-    // Si el bucle termina sin 'break', 'pos' será 'cantidad_elementos_actual', lo que significa que el nuevo registro va al final (es el más grande).
+    // Si el bucle termina sin 'break', 'pos' serï¿½ 'cantidad_elementos_actual', lo que significa que el nuevo registro va al final (es el mï¿½s grande).
     // Mover elementos para "hacer el hueco"
     int elementos_a_mover = indice->cantidad_elementos_actual - pos;
     if (elementos_a_mover > 0)
@@ -152,24 +152,36 @@ int indice_construir_desde_dat(t_indice *indice, const char *path_archivo_dat, s
     t_miembro miembro_leido;
     t_reg_indice nuevo_reg_indice;
     unsigned nro_reg = 0;
+    
     // Leemos el archivo .dat de principio a fin
     while (fread(&miembro_leido, sizeof(t_miembro), 1, arch_dat))
     {
         // Solo indexamos registros activos (Estado 'A')
         if (miembro_leido.estado == 'A')
         {
-            // Creamos el registro de índice
+            // Creamos el registro de Ã­ndice
             nuevo_reg_indice.dni = miembro_leido.dni;
             nuevo_reg_indice.nro_reg = nro_reg;
-            // Lo insertamos en orden en el TDA
-            if (indice_insertar(indice, &nuevo_reg_indice, tamanyo_reg_indice, cmp) == ERROR)
+
+            // 1. Verificamos si el DNI ya existe en el Ã­ndice
+            //   (Usamos 0 para 'nmemb' porque la funciÃ³n buscar usa la cant. actual del Ã­ndice)
+            if (indice_buscar(indice, &nuevo_reg_indice, 0, tamanyo_reg_indice, cmp) == NO_EXISTE)
             {
-                printf("Error: Fallo al insertar en el indice (posiblemente sin memoria).\n");
-                fclose(arch_dat);
-                return ERROR;
+                // 2. Si NO existe, lo insertamos en orden en el TDA
+                if (indice_insertar(indice, &nuevo_reg_indice, tamanyo_reg_indice, cmp) == ERROR)
+                {
+                    printf("Error: Fallo al insertar en el indice (posiblemente sin memoria).\n");
+                    fclose(arch_dat);
+                    return ERROR;
+                }
+            }
+            else
+            {
+                // 3. Si SÃ existe, es un duplicado en el .dat. Lo informamos y omitimos.
+                printf("ADVERTENCIA: DNI duplicado %ld omitido durante la carga del indice desde .dat\n", nuevo_reg_indice.dni);
             }
         }
-        nro_reg++;
+        nro_reg++; 
     }
     fclose(arch_dat);
     return OK;
@@ -180,22 +192,22 @@ int indice_cargar(const char* path, t_indice* indice, void *vreg_ind, size_t tam
     FILE *arch_idx = fopen(path, "rb");
     if (arch_idx == NULL)
         return ERROR;
-    // Calculamos cuántos registros hay en el archivo
+    // Calculamos cuï¿½ntos registros hay en el archivo
     fseek(arch_idx, 0, SEEK_END); // Vamos al final del archivo
-    long tam_archivo_bytes = ftell(arch_idx); // Obtenemos el tamaño en bytes
+    long tam_archivo_bytes = ftell(arch_idx); // Obtenemos el tamaï¿½o en bytes
     rewind(arch_idx); // Volvemos al principio
 
     unsigned cant_registros = (unsigned)(tam_archivo_bytes / tamanyo);
     if (cant_registros == 0)
     {
-        // El archivo está vacío, no hay nada que cargar.
+        // El archivo estï¿½ vacï¿½o, no hay nada que cargar.
         fclose(arch_idx);
         return OK;
     }
     // Verificamos si tenemos suficiente memoria en el TDA
     if (indice->cantidad_elementos_maxima < cant_registros)
     {
-        // Usamos realloc() para ajustar la memoria exactamente al tamaño necesario
+        // Usamos realloc() para ajustar la memoria exactamente al tamaï¿½o necesario
         void *nuevo_puntero = realloc(indice->vindice, tam_archivo_bytes);
         if (nuevo_puntero == NULL)
         {
