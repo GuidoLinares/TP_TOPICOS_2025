@@ -1,5 +1,6 @@
 #include "menu.h"
 
+
 void mostrar_menu (const char *menu[], int tam)
 {
     puts("Seleccione algunas de las siguientes opciones:");
@@ -28,77 +29,123 @@ char capturar_opcion(char li, char ls)
 
 void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fecha, int (*cmp)(const void*, const void*))
 {
-    FILE *pf = fopen(nombre_archivo_bin, "ab");
-    if(!pf)
-    {
-        printf("Error al abrir el archivo binario.\n");
-        exit(1);
-    }
-
     t_miembro nuevo;
-    t_reg_indice reg_buscar, reg;
-    long pos;
-
+    long dni_temp;
+    
     printf("Ingresar DNI: ");
-    scanf("%ld", &reg_buscar.dni);
-
-    /// VERIFICAR EXISTENCIA EN EL �NDICE
-    if(indice_buscar(indice, &reg_buscar, 0, sizeof(t_reg_indice), cmp) != NO_EXISTE)
+    scanf("%ld", &dni_temp);
+    
+    // VALIDACIÓN 1: DNI único y en rango
+    if(!validar_dni_unico(indice, dni_temp, cmp))
     {
-        printf("\nEl miembro con DNI %ld ya existe.\n", reg_buscar.dni);
-        fclose(pf);
+        while(getchar() != '\n');
         return;
     }
-
-    /// SI NO EXISTE, CARGAR DATOS
-    nuevo.dni = reg_buscar.dni;
-
-    // Limpiar buffer despu�s del primer scanf
+    
+    nuevo.dni = dni_temp;
     while(getchar() != '\n');
-
+    
+    // NOMBRE Y APELLIDO
     printf("Nombre y apellido: ");
-    fgets(nuevo.apeynom, sizeof(nuevo.apeynom), stdin);
+    if(!fgets(nuevo.apeynom, sizeof(nuevo.apeynom), stdin))
+    {
+        return;
+    }
     nuevo.apeynom[strcspn(nuevo.apeynom, "\n")] = '\0';
-
+    
+    // VALIDACIÓN 2: Nombre
+    if(!validar_nombre(nuevo.apeynom))
+    {
+        return;
+    }
+    
+    // FECHA DE NACIMIENTO
     printf("Fecha de nacimiento (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_nac.dia, &nuevo.fecha_nac.mes, &nuevo.fecha_nac.anio);
-
-    printf("Fecha de afiliaci�n (dd/mm/aaaa): ");
+    
+    // VALIDACIÓN 3: Fecha de nacimiento (incluye edad >= 10)
+    if(!validar_fecha_nacimiento(&nuevo.fecha_nac, fecha))
+    {
+        while(getchar() != '\n');
+        return;
+    }
+    
+    // FECHA DE AFILIACIÓN
+    printf("Fecha de afiliación (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_afi.dia, &nuevo.fecha_afi.mes, &nuevo.fecha_afi.anio);
-
+    
+    // VALIDACIÓN 4: Fecha de afiliación
+    if(!validar_fecha_afiliacion(&nuevo.fecha_afi, &nuevo.fecha_nac, fecha))
+    {
+        while(getchar() != '\n');
+        return;
+    }
+    
+    // SEXO
     printf("Sexo (M/F): ");
     while(getchar() != '\n');
     scanf("%c", &nuevo.sexo);
-    nuevo.sexo = toupper(nuevo.sexo); // Convertir a may�scula
-
+    
+    // VALIDACIÓN 5: Sexo
+    if(!validar_sexo(nuevo.sexo))
+    {
+        while(getchar() != '\n');
+        return;
+    }
+    
+    nuevo.sexo = toupper(nuevo.sexo);
+    
+    // CATEGORÍA
     printf("Categoria (ADULTO/MENOR): ");
     while(getchar() != '\n');
     fgets(nuevo.categoria, sizeof(nuevo.categoria), stdin);
     nuevo.categoria[strcspn(nuevo.categoria, "\n")] = '\0';
-    // Convertir a may�sculas
+    
     for(int i = 0; nuevo.categoria[i]; i++) {
         nuevo.categoria[i] = toupper(nuevo.categoria[i]);
     }
-
+    
+    // VALIDACIÓN 6: Categoría (consistencia con edad)
+    if(!validar_categoria(nuevo.categoria, &nuevo.fecha_nac, fecha))
+    {
+        return;
+    }
+    
+    // FECHA ÚLTIMA CUOTA
     printf("Fecha ultima cuota paga (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_ult_cuo.dia, &nuevo.fecha_ult_cuo.mes, &nuevo.fecha_ult_cuo.anio);
-
+    
+    // VALIDACIÓN 7: Fecha última cuota
+    if(!validar_fecha_ultima_cuota(&nuevo.fecha_ult_cuo, &nuevo.fecha_afi, fecha))
+    {
+        while(getchar() != '\n');
+        return;
+    }
+    
     nuevo.estado = 'A';
-
+    
+    // PLAN
     printf("Plan (BASIC/PREMIUM/VIP/FAMILY): ");
     while(getchar() != '\n');
     fgets(nuevo.plan, sizeof(nuevo.plan), stdin);
     nuevo.plan[strcspn(nuevo.plan, "\n")] = '\0';
-    // Convertir a may�sculas
+    
     for(int i = 0; nuevo.plan[i]; i++) {
         nuevo.plan[i] = toupper(nuevo.plan[i]);
     }
-
-    /// SI ES MENOR DE EDAD TIENE TUTOR CON EMAIL
-    if(calcular_edad(&nuevo.fecha_nac, fecha) < 18)
+    
+    // VALIDACIÓN 8: Plan
+    if(!validar_plan(nuevo.plan))
+    {
+        return;
+    }
+    
+    // EMAIL TUTOR (si es menor)
+    int es_menor = (calcular_edad(&nuevo.fecha_nac, fecha) < 18);
+    
+    if(es_menor)
     {
         printf("Email tutor: ");
-        while(getchar() != '\n');
         fgets(nuevo.emailTutor, sizeof(nuevo.emailTutor), stdin);
         nuevo.emailTutor[strcspn(nuevo.emailTutor, "\n")] = '\0';
     }
@@ -106,29 +153,36 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     {
         strcpy(nuevo.emailTutor, "");
     }
-
-    char *error_msg = validar_miembro(&nuevo, fecha);
-    if(error_msg != NULL)
+    
+    // VALIDACIÓN 9: Email tutor (incluye validación de formato y regla adulto/menor)
+    if(!validar_email_tutor(nuevo.emailTutor, es_menor))
     {
-        printf("\nDatos incorrectos: %s\n", error_msg);
-        printf("Alta cancelada.\n");
-        fclose(pf);
         return;
     }
-
-    /// AGREGAR REGISTRO AL FINAL DEL ARCHIVO
+    
+    // TODAS LAS VALIDACIONES PASARON - AHORA SÍ GRABAR
+    FILE *pf = fopen(nombre_archivo_bin, "ab");
+    if(!pf)
+    {
+        printf("Error al abrir el archivo binario.\n");
+        return;
+    }
+    
+    // AGREGAR REGISTRO AL FINAL DEL ARCHIVO
     fseek(pf, 0, SEEK_END);
-    pos = ftell(pf);
+    long pos = ftell(pf);
     fwrite(&nuevo, sizeof(t_miembro), 1, pf);
-
-    /// INSERTAR EN EL �NDICE
+    fclose(pf);
+    
+    // INSERTAR EN EL ÍNDICE
+    t_reg_indice reg;
     reg.dni = nuevo.dni;
     reg.nro_reg = pos / sizeof(t_miembro);
     indice_insertar(indice, &reg, sizeof(t_reg_indice), cmp);
-
+    
     printf("\nMiembro agregado exitosamente.\n");
-    fclose(pf);
 }
+
 
 void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(const void*, const void*))
 {

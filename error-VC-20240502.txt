@@ -1,0 +1,26 @@
+DNI fuera de rango (1000001-99999999)|100000000|Test Adulto|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|BASIC
+DNI fuera de rango (1000001-99999999)|999999|Test Adulto|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|BASIC
+|Test Adulto|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|BASIC|Error: Formato de linea invalido, faltan campos
+DNI fuera de rango (1000001-99999999)|ABC123|Test Adulto|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|BASIC
+2000002|Apellido Nombre Apellido Nombre Apellido Nombre Apellido Nombre Apellido Nombre |19/09/1995|M19/09/2014|ADULTO|19/10/2014|A|BASIC|Error: Formato de linea invalido, faltan campos
+Fecha de nacimiento invalida|2000002|Castro Mariano|2025-02-30|M|19/09/2014|ADULTO|19/10/2014|A|BASIC
+El miembro debe tener al menos 10 años|2000002|Castro Mariano|19/09/2015|M|19/09/2014|ADULTO|19/10/2014|A|BASIC
+El miembro debe tener al menos 10 años|2000002|Castro Mariano|19/09/2020|M|19/09/2014|ADULTO|19/10/2014|A|BASIC
+Sexo invalido (debe ser M o F)|2000002|Castro Mariano|19/09/1995|X|19/09/2014|ADULTO|19/10/2014|A|BASIC
+2000002|Castro Mariano|19/09/1995||19/09/2014|ADULTO|19/10/2014|A|BASIC|Error: Formato de linea invalido, faltan campos
+Fecha de afiliacion debe ser posterior a la fecha de nacimiento|2000002|Castro Mariano|19/09/1995|M|19/09/1995|ADULTO|19/10/2014|A|BASIC
+Fecha de afiliacion no puede ser posterior a la fecha de proceso|2000002|Castro Mariano|19/09/1995|M|20/09/2025|ADULTO|19/10/2014|A|BASIC
+Fecha de afiliacion no puede ser posterior a la fecha de proceso|2000002|Castro Mariano|19/09/1995|M|01-01-2020|ADULTO|19/10/2014|A|BASIC
+Categoria inconsistente (deberia ser ADULTO por edad)|2000001|Martinez Mauro|19/09/2005|F|19/09/2006|MENOR|19/10/2006|A|BASIC|menor@test.com
+Categoria inconsistente (deberia ser MENOR por edad)|2000002|Castro Mariano|19/09/2008|M|19/09/2009|ADULTO|19/10/2009|A|BASIC
+Fecha ultima cuota debe ser posterior o igual a la fecha de afiliacion|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|18/09/2014|A|BASIC
+Fecha ultima cuota no puede ser posterior a la fecha de proceso|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|21/09/2025|A|BASIC
+2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|CBASIC|Error: Formato de linea invalido, faltan campos
+2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|19/10/2014||BASIC|Error: Formato de linea invalido, faltan campos
+Plan invalido (debe ser BASIC, PREMIUM, VIP o FAMILY)|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|PLUS|
+2000002|Castro Mariano|19/09/1995|M19/09/2014|ADULTO|19/10/2014|A|basiC|Error: Formato de linea invalido, faltan campos
+Los adultos no deben tener email de tutor|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|PREMIUM|PLUS|
+Menor de edad debe tener email de tutor|2000001|Martinez Mauro|19/09/2010|F|19/09/2021|MENOR|19/10/2021|A|BASIC
+Formato de email tutor invalido|2000001|Martinez Mauro|19/09/2010|F|19/09/2021|MENOR|19/10/2021|A|BASIC|pepe@@dominio
+Los adultos no deben tener email de tutor|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|BASIC|adulto@test.com
+Los adultos no deben tener email de tutor|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|19/10/2014|A|BASIC|adulto#test.com

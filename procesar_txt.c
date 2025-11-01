@@ -1,5 +1,6 @@
 #include "procesar_txt.h"
 
+
 void generar_nombre_archivo(char *nombre_arch, const char *prefijo, t_fecha fecha, const char *tipo_archivo)
 {
     sprintf(nombre_arch, "%s-%04d%02d%02d%s", prefijo, fecha.anio, fecha.mes, fecha.dia, tipo_archivo);
@@ -130,7 +131,7 @@ int linea_a_miembro (char* linea, t_miembro* miembro)
     if(token != NULL) // Si el token NO es nulo
         strcpy(miembro->emailTutor, token); // Lo copiamos
     else
-        strcpy(miembro->emailTutor, ""); // Si es nulo, guardamos un string vacío
+        strcpy(miembro->emailTutor, ""); // Si es nulo, guardamos un string vacï¿½o
 
     return 1;
 }
@@ -141,7 +142,7 @@ int recuperar_archivo(t_fecha fecha_proceso, char *nombre_arch_encontrado)
     t_fecha fecha_busqueda = fecha_proceso;
     char nombre_temporal[TAM_NOM_ARCH];
 
-    // Buscamos como máximo en los últimos 365 días
+    // Buscamos como mï¿½ximo en los ï¿½ltimos 365 dï¿½as
     for (int i = 0; i < 365; i++)
     {
         restar_un_dia(&fecha_busqueda);

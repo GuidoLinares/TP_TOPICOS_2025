@@ -354,7 +354,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1761620558 source:s:\desktop\tp_topicos_2025\indice.c
+1761953049 source:s:\desktop\tp_topicos_2025\indice.c
 	"indice.h"
 
 1761620653 s:\desktop\tp_topicos_2025\indice.h
@@ -404,6 +404,6 @@
 	"procesar_txt.h"
 	"indice.h"
 
-1761686818 source:s:\desktop\tp_topicos_2025\menu.c
+1761692406 source:s:\desktop\tp_topicos_2025\menu.c
 	"menu.h"
 
