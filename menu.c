@@ -183,7 +183,6 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     printf("\nMiembro agregado exitosamente.\n");
 }
 
-
 void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(const void*, const void*))
 {
     FILE *pf = fopen(nombre_archivo_bin, "r+b");
@@ -627,41 +626,6 @@ void modificar_miembro(const char *arch_bin, t_indice *pIndice, t_fecha *fecha_p
 
     fclose(fp);
 }
-
-void mostrar_miembros_inactivos(const char* arch_bin)
-{
-    t_miembro miembro;
-
-    FILE*fp = fopen(arch_bin, "rb");
-    if (!fp)
-    {
-        puts("No se pudo abrir el archivo");
-        exit (-1);
-    }
-
-    puts("------LISTADO DE MIEMBROS DADOS DE BAJA------");
-    while (fread(&miembro, sizeof(t_miembro),1,fp) != 1)
-    {
-
-        if (miembro.estado == 'B')
-        {
-            printf("NOMBRE Y APELLIDO: %s\n",miembro.apeynom);
-            printf("CATEGORIA: %s\n",miembro.categoria);
-            printf("DNI: %ld\n",miembro.dni);
-            printf("EMAIL TUTOR: %s\n",miembro.emailTutor);
-            printf("FECHA AFILIACION: %d-%d-%d\n",miembro.fecha_afi.dia,miembro.fecha_afi.mes,miembro.fecha_afi.anio);
-            printf("FECHA NACIMIENTO: %d-%d-%d\n",miembro.fecha_nac.dia,miembro.fecha_nac.mes,miembro.fecha_nac.anio);
-            printf("FECHA ULTIMA CUOTA: %d-%d-%d\n",miembro.fecha_ult_cuo.dia,miembro.fecha_ult_cuo.mes,miembro.fecha_ult_cuo.anio);
-            printf("ESTADO: %c\n",miembro.estado);
-            printf("PLAN: %s\n",miembro.plan);
-            printf("SEXO: %c\n",miembro.sexo);
-        }
-
-    }
-    fclose(fp);
-}
-
-
 
 
 

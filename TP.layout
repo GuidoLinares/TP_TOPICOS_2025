@@ -2,25 +2,14 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="menu.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="procesar_txt.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="20819" topLine="1" />
+			<Cursor1 position="598" topLine="0" />
 		</Cursor>
-		<Folding>
-			<Collapse line="10" />
-			<Collapse line="29" />
-			<Collapse line="133" />
-			<Collapse line="188" />
-			<Collapse line="252" />
-			<Collapse line="301" />
-			<Collapse line="394" />
-			<Collapse line="417" />
-			<Collapse line="577" />
-		</Folding>
 	</File>
-	<File name="miembros.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="procesar_txt.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="82" topLine="0" />
+			<Cursor1 position="4629" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="indice.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -33,35 +22,14 @@
 			<Cursor1 position="502" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="fecha.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2032" topLine="48" />
+		</Cursor>
+	</File>
 	<File name="validacion.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="375" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="procesar_txt.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="598" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="menu.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="890" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="procesar_txt.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4629" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="3" />
-			<Collapse line="8" />
-			<Collapse line="70" />
-			<Collapse line="138" />
-		</Folding>
-	</File>
-	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4175" topLine="115" />
 		</Cursor>
 	</File>
 	<File name="indice.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -75,14 +43,38 @@
 			<Collapse line="190" />
 		</Folding>
 	</File>
-	<File name="fecha.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="menu.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2032" topLine="48" />
+			<Cursor1 position="890" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="menu.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="20819" topLine="1" />
+		</Cursor>
+		<Folding>
+			<Collapse line="132" />
+			<Collapse line="187" />
+			<Collapse line="242" />
+			<Collapse line="299" />
+			<Collapse line="355" />
+			<Collapse line="390" />
+			<Collapse line="537" />
+		</Folding>
+	</File>
+	<File name="miembros.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="82" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4175" topLine="115" />
 		</Cursor>
 	</File>
 	<File name="validacion.c" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2903" topLine="18" />
+			<Cursor1 position="2457" topLine="18" />
 		</Cursor>
 		<Folding>
 			<Collapse line="3" />

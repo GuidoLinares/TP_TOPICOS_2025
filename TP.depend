@@ -377,10 +377,11 @@
 	"validacion.h"
 	<stdio.h>
 
-1761620558 s:\desktop\tp_topicos_2025\validacion.h
+1762005100 s:\desktop\tp_topicos_2025\validacion.h
 	"fecha.h"
 	"miembros.h"
 	"menu.h"
+	"indice.h"
 	<ctype.h>
 	<string.h>
 
