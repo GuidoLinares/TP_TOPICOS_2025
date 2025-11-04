@@ -25,6 +25,15 @@ unsigned cantidad_elementos_actual;
 unsigned cantidad_elementos_maxima;
 }t_indice;
 
+
+typedef struct 
+{
+   unsigned nro_reg;
+   char nombreApe [50];
+}t_reg_indice_apeynom;
+
+
+
 void indice_crear(t_indice *indice, size_t nmemb, size_t tamanyo);
 void indice_redimensionar(t_indice *indice, size_t nmemb, size_t tamanyo);
 int indice_insertar (t_indice *indice, const void *registro, size_t tamanyo, int (*cmp)(const void *, const void *));
@@ -36,6 +45,7 @@ void indice_vaciar(t_indice* indice);
 int indice_cargar(const char* path, t_indice* indice, void *vreg_ind, size_t tamanyo, int (*cmp)(const void *, const void *));
 int indice_construir_desde_dat(t_indice *indice, const char *path_archivo_dat, size_t tamanyo_reg_indice, int (*cmp)(const void*, const void*));
 int cmp_indice_dni(const void *a, const void *b);
+void* cmp_
 
 
 #endif // INDICE_H_INCLUDED

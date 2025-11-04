@@ -137,13 +137,19 @@ int main()
 
         case 'G':
             system("cls");
-            mostrar_miembros_inactivos(arch_bin);
+            //mostrar_miembros_inactivos(arch_bin);
             break;
 
         case 'H':
             system("cls");
             //mostrar_miembros_rango_edad(&indice, arch_bin);
             break;
+
+        case 'I':
+            system("cls");
+            mostrar_estadisticas(arch_bin);
+            break;
+
 
         case 'J':
             system("cls");

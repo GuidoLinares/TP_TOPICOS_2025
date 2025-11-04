@@ -627,6 +627,36 @@ void modificar_miembro(const char *arch_bin, t_indice *pIndice, t_fecha *fecha_p
     fclose(fp);
 }
 
+void mostrar_estadisticas(char *arch_bin)
+{
+
+    t_miembro miembros;
+    int contAltas = 0;
+    int contBajas = 0;
+    int contTotMiemb = 0;
+
+    FILE*fp = fopen(arch_bin, "rb");
+    if (!fp)
+    {
+        puts("error al abrir el archivo");
+        exit(-1);
+    }
+
+    while (fread(&miembros, sizeof(t_miembro),1,fp))
+    {
+        contTotMiemb++;
+        if (miembros.estado == 'A')
+            contAltas ++;
+        else if (miembros.estado == 'B')
+            contBajas++;
+    
+    }
+    
+    printf("\n ESTADISTICAS DEL ARCHIVO %s",arch_bin);
+    printf("\n TOTAL MIEMBROS: %d \n TOTAL MIEMBROS ACTIVOS: %d \n TOTAL MIEMBROS INACTIVOS: %d",contTotMiemb, contAltas, contBajas);    
+}
+
+
 
 
 
