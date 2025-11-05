@@ -246,7 +246,67 @@ int cmp_indice_dni(const void *a, const void *b)
     return 0;
 }
 
+void* cmp_indice_nomape(const void*a, const void*b)
+{
+    t_reg_indice_apeynom *reg_a = (char*)(t_reg_indice_apeynom*)a;
+    
+    t_reg_indice_apeynom *reg_b = (char*)(t_reg_indice_apeynom*)b;
 
+    if (strcmp(reg_a->nombreApe, reg_b->nombreApe) > 0) //reg_a > reg_b
+        return 1;
+    if (strcmp(reg_a->nombreApe, reg_b->nombreApe) < 0) //reg_b > reg_a
+        return -1;
+    
+    return 0;
+}
+
+
+int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archivo_dat)
+{
+    FILE *arch_dat = fopen(path_archivo_dat, "rb");
+        if (arch_dat == NULL)
+        {
+            printf("Error: No se pudo abrir el archivo .dat para construir el indice.\n");
+            return ERROR;
+        }
+        t_miembro miembro_leido;
+        t_reg_indice_apeynom nuevo_reg_indice_nom_ape;
+        unsigned nro_reg = 0;
+        
+        // Leemos el archivo .dat de principio a fin
+        while (fread(&miembro_leido, sizeof(t_miembro), 1, arch_dat))
+        {
+            // Solo indexamos registros activos (Estado 'A')
+            if (miembro_leido.estado == 'A')
+            {
+                // Creamos el registro de índice
+                strcpy(nuevo_reg_indice_nom_ape.nombreApe, miembro_leido.apeynom);
+                nuevo_reg_indice_nom_ape.nro_reg = nro_reg;
+
+                // 1. Verificamos si el DNI ya existe en el índice
+                //   (Usamos 0 para 'nmemb' porque la función buscar usa la cant. actual del índice)
+                if (indice_buscar(indice, &nuevo_reg_indice_nom_ape, 0, sizeof(t_reg_indice_apeynom), cmp_indice_nomape) == NO_EXISTE)
+                {
+                    // 2. Si NO existe, lo insertamos en orden en el TDA
+                    if (indice_insertar(indice, &nuevo_reg_indice_nom_ape, sizeof(t_reg_indice_apeynom), cmp_indice_nomape) == ERROR)
+                    {
+                        printf("Error: Fallo al insertar en el indice (posiblemente sin memoria).\n");
+                        fclose(arch_dat);
+                        return ERROR;
+                    }
+                }
+                else
+                {
+                    // 3. Si SÍ existe, es un duplicado en el .dat. Lo informamos y omitimos.
+                    printf("ADVERTENCIA: NOMNBRE Y APELLIDO duplicado %s omitido durante la carga del indice desde .dat\n", nuevo_reg_indice_nom_ape.nombreApe);
+                }
+            }
+            nro_reg++; 
+        }
+        fclose(arch_dat);
+        return OK;
+
+}
 
 
 

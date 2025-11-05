@@ -45,7 +45,11 @@ void indice_vaciar(t_indice* indice);
 int indice_cargar(const char* path, t_indice* indice, void *vreg_ind, size_t tamanyo, int (*cmp)(const void *, const void *));
 int indice_construir_desde_dat(t_indice *indice, const char *path_archivo_dat, size_t tamanyo_reg_indice, int (*cmp)(const void*, const void*));
 int cmp_indice_dni(const void *a, const void *b);
-void* cmp_
+
+//NUEVAS MODIFICACIONES
+void* cmp_indice_nomape(const void*, const void*);
+int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archivo_dat);
+
 
 
 #endif // INDICE_H_INCLUDED
