@@ -27,7 +27,7 @@ char capturar_opcion(char li, char ls)
     return opcion;
 }
 
-void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_reg_indice_apeynom*indiceNomApe, t_fecha *fecha, int (*cmp)(const void*, const void*), int(*cmp_indice_nomape)(void*,void*))
+void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_indice*indiceNomApe, t_fecha *fecha, int (*cmp)(const void*, const void*), int(*cmp_indice_nomape)(const void*,const void*))
 {
     t_miembro nuevo;
     long dni_temp;
@@ -189,7 +189,7 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_reg_indice_
     printf("\nMiembro agregado exitosamente.\n");
 }
 
-void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(const void*, const void*))
+void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, t_indice*indice_nomApe, int (*cmp)(const void*, const void*),int(*cmp_indice_nomape)(const void*,const void*))
 {
     FILE *pf = fopen(nombre_archivo_bin, "r+b");
     if (!pf)
@@ -228,7 +228,9 @@ void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(c
         fclose(pf);
         return;
     }
-
+    t_reg_indice_apeynom  indice_apeNom;
+    strcpy(indice_apeNom.nombreApe, miembro.apeynom);
+    indice_apeNom.nro_reg = pos_registro;
     // Marcar como dado de baja
     miembro.estado = 'B';
 
@@ -238,6 +240,8 @@ void baja_miembro(const char *nombre_archivo_bin, t_indice *indice, int (*cmp)(c
 
     // Eliminar del �ndice
     indice_eliminar(indice, &reg_buscar, sizeof(t_reg_indice), cmp);
+    indice_eliminar(indice_nomApe, &indice_apeNom, sizeof(t_reg_indice_apeynom), cmp_indice_nomape);
+
 
     printf("\nMiembro con DNI %ld dado de baja correctamente.\n", dni_baja);
 
@@ -662,7 +666,109 @@ void mostrar_estadisticas(char *arch_bin)
     printf("\n TOTAL MIEMBROS: %d \n TOTAL MIEMBROS ACTIVOS: %d \n TOTAL MIEMBROS INACTIVOS: %d",contTotMiemb, contAltas, contBajas);    
 }
 
+void listar_miembros_nombre(const t_indice *indice_apeynom, const char *nombre_archivo_bin)
+{
+    puts("\n--- Listado de Miembros Activos (Ordenados por Nombre) ---\n");
 
+    if (indice_vacio(indice_apeynom))
+    {
+        puts("No hay miembros activos para listar.\n");
+        return;
+    }
+
+    FILE *pf = fopen(nombre_archivo_bin, "rb");
+    if (!pf)
+    {
+        puts("\nError al abrir el archivo binario.\n");
+        return;
+    }
+
+
+    t_reg_indice_apeynom *vindice_ape = (t_reg_indice_apeynom *)indice_apeynom->vindice;
+
+    t_miembro miembro;
+    for (int i = 0; i < indice_apeynom->cantidad_elementos_actual; i++)
+    {
+        unsigned nro_reg = vindice_ape[i].nro_reg;
+        long pos_bytes = nro_reg * sizeof(t_miembro);
+
+        // Vamos a esa posici�n en el archivo
+        fseek(pf, pos_bytes, SEEK_SET);
+
+
+        fread(&miembro, sizeof(t_miembro),1,pf);
+
+        printf("\n APELLIDO: %s \n DNI: %ld",miembro.apeynom, miembro.dni);
+    }
+
+    fclose(pf);
+}
+
+void top5CuotasAntiguas(const t_indice* indiceCuota, const char *nombre_archivo_bin)
+{
+    puts("\n--- Listado de las 5 cuotas mas antiguas (Ordenados por Fecha) ---\n");
+
+    if (indice_vacio(indiceCuota))
+    {
+        puts("No hay miembros activos para listar.\n");
+        return;
+    }
+    
+    printf("DEBUG: cantidad_elementos_actual = %u\n", indiceCuota->cantidad_elementos_actual);
+
+    FILE*pf = fopen(nombre_archivo_bin, "rb");
+    if (!pf)
+    {
+        puts("\nError al abrir el archivo binario.\n");
+        return;
+    }
+    
+    t_reg_indice_cuota *vIndiceCuota = (t_reg_indice_cuota*)indiceCuota->vindice;
+    t_miembro miembros;
+    int limite = (indiceCuota->cantidad_elementos_actual < 5) ? indiceCuota->cantidad_elementos_actual : 5;
+
+    printf("\n TOP 5 FECHAS MAS ANTIGUAS (limite=%d):\n", limite);
+    
+    // PRIMERO: Ver qué hay en el índice
+    printf("\nContenido del indice:\n");
+    for (int i = 0; i < limite; i++)
+    {
+        printf("  [%d] nro_reg=%u, fecha_en_indice=%02d/%02d/%04d\n", 
+               i, 
+               vIndiceCuota[i].nro_reg,
+               vIndiceCuota[i].fecha_cuota.dia,
+               vIndiceCuota[i].fecha_cuota.mes,
+               vIndiceCuota[i].fecha_cuota.anio);
+    }
+    
+    // SEGUNDO: Leer del archivo
+    printf("\nLeyendo del archivo .dat:\n");
+    for (int i = 0; i < limite; i++)
+    {
+        unsigned nro_reg = vIndiceCuota[i].nro_reg;
+        long pos_bytes = nro_reg * sizeof(t_miembro);
+        
+        printf("  [%d] Buscando nro_reg=%u en pos_bytes=%ld... ", i, nro_reg, pos_bytes);
+        
+        fseek(pf, pos_bytes, SEEK_SET);
+        
+        if (fread(&miembros, sizeof(t_miembro), 1, pf) == 1)
+        {
+            printf("OK - DNI=%ld, Estado=%c, Fecha=%02d/%02d/%04d\n",
+                   miembros.dni,
+                   miembros.estado,
+                   miembros.fecha_ult_cuo.dia, 
+                   miembros.fecha_ult_cuo.mes, 
+                   miembros.fecha_ult_cuo.anio);
+        }
+        else
+        {
+            printf("ERROR AL LEER!\n");
+        }
+    }
+    
+    fclose(pf);
+}
 
 
 

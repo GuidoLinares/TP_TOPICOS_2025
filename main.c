@@ -13,7 +13,8 @@ int main()
     /// DECLARACIONES
     t_fecha fecha_proceso;
     t_indice indice;
-    t_reg_indice_apeynom indiceApeNom;
+    t_indice indiceApeNom;
+    t_indice indiceCuota;
 
     puts("=== VIDEOCLUB CINEFILIA ===");
     puts("Sistema de Gestion de Miembros\n");
@@ -80,6 +81,30 @@ int main()
 
     printf("Indice cargado con %u elementos.\n\n", indice.cantidad_elementos_actual);
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    puts("Creando indice APELLIDO Y NOMBRE en memoria...\n");
+    indice_crear(&indiceApeNom, 0, sizeof(t_reg_indice_apeynom)); 
+
+    if (indice_construir_apeynom_desde_dat(&indiceApeNom, arch_bin) == ERROR)
+    {
+        puts("Error: No se pudo construir el indice de Apellido y Nombre.\n");
+        indice_vaciar(&indiceApeNom);
+    }
+    printf("Indice APELLIDO cargado con %u elementos.\n\n", indiceApeNom.cantidad_elementos_actual);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    puts("Creando indice Fecha cuota paga en memoria...\n");
+    indice_crear(&indiceCuota, 0, sizeof(t_reg_indice_cuota)); 
+
+    if (indice_construir_apeynom_desde_dat(&indiceCuota, arch_bin) == ERROR)
+    {
+        puts("Error: No se pudo construir el indice de Apellido y Nombre.\n");
+        indice_vaciar(&indiceCuota);
+    }
+    printf("Indice CUOTA cargado con %u elementos.\n\n", indiceCuota.cantidad_elementos_actual);
+
     /// MENU PROCESAMIENTO
     const char *menu_binario[] =
     {
@@ -89,9 +114,9 @@ int main()
         "\tD) Mostrar informacion de un miembro",
         "\tE) Listado de miembros ordenados por DNI",
         "\tF) Listado de todos los miembros agrupados por plan",
-        "\tG) Listado de todos los miembros inactivos (dados de baja)",
-        "\tH) Buscar miembros por rangos de edad",
-        "\tI) Mostrar Estadísticas Simples",
+        "\tG) Listado de miembros por Apellido y Nombre",
+        "\tH) Listado 5 cuotas mas antiguas",
+        "\tI) Mostrar Estadisticas Simples",
         "\tJ) Salir"
     };
 
@@ -113,7 +138,7 @@ int main()
 
         case 'B':
             system("cls");
-            baja_miembro(arch_bin, &indice, cmp_indice_dni);
+            baja_miembro(arch_bin, &indice,&indiceApeNom,cmp_indice_dni, cmp_indice_nomape);
             break;
 
         case 'C':
@@ -138,12 +163,12 @@ int main()
 
         case 'G':
             system("cls");
-            //mostrar_miembros_inactivos(arch_bin);
+            listar_miembros_nombre(&indiceApeNom, arch_bin);
             break;
 
         case 'H':
             system("cls");
-            //mostrar_miembros_rango_edad(&indice, arch_bin);
+            top5CuotasAntiguas(&indiceCuota, arch_bin);
             break;
 
         case 'I':
@@ -173,6 +198,8 @@ int main()
 
     puts("Liberando memoria del indice...\n");
     free(indice.vindice);
+    free(indiceApeNom.vindice);
+    free(indiceCuota.vindice);
 
     return 0;
 }

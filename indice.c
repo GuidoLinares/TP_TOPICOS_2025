@@ -1,4 +1,5 @@
 #include "indice.h"
+#include "fecha.h"
 
 void indice_crear(t_indice *indice, size_t nmemb, size_t tamanyo)
 {
@@ -246,20 +247,21 @@ int cmp_indice_dni(const void *a, const void *b)
     return 0;
 }
 
-void* cmp_indice_nomape(const void*a, const void*b)
+int cmp_indice_nomape(const void*a, const void*b)
 {
-    t_reg_indice_apeynom *reg_a = (char*)(t_reg_indice_apeynom*)a;
-    
-    t_reg_indice_apeynom *reg_b = (char*)(t_reg_indice_apeynom*)b;
-
-    if (strcmp(reg_a->nombreApe, reg_b->nombreApe) > 0) //reg_a > reg_b
-        return 1;
-    if (strcmp(reg_a->nombreApe, reg_b->nombreApe) < 0) //reg_b > reg_a
-        return -1;
-    
-    return 0;
+    t_reg_indice_apeynom *reg_a = (t_reg_indice_apeynom*)a;
+    t_reg_indice_apeynom *reg_b = (t_reg_indice_apeynom*)b;   
+    return strcmp(reg_a->nombreApe, reg_b->nombreApe);
 }
 
+int cmp_indice_cuota(const void*a, const void*b)
+{
+
+    t_reg_indice_cuota*reg_a = (t_reg_indice_cuota*)a;
+    t_reg_indice_cuota*reg_b =  (t_reg_indice_cuota*)b;
+    
+    return cmp_fechas(&reg_a->fecha_cuota,&reg_b->fecha_cuota);
+}
 
 int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archivo_dat)
 {
@@ -308,6 +310,53 @@ int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archiv
 
 }
 
+int indice_construir_top5_cuota(t_indice* indiceCuota, const char *path_archivo_dat)
+{
+    FILE *arch_dat = fopen(path_archivo_dat, "rb");
+    if (arch_dat == NULL)
+    {
+        printf("Error: No se pudo abrir el archivo .dat para construir el indice.\n");
+        return ERROR;
+    }
+    
+    t_miembro miembro_leido;
+    t_reg_indice_cuota reg_cuota;
+    unsigned nro_reg = 0;
+
+
+    while (fread(&miembro_leido, sizeof(t_miembro),1,arch_dat))
+    {
+        if (miembro_leido.estado == 'A')
+        {
+            reg_cuota.fecha_cuota = miembro_leido.fecha_ult_cuo; 
+            reg_cuota.nro_reg = nro_reg;
+            
+            if (indiceCuota->cantidad_elementos_actual < 5)
+            {
+                if (indice_insertar(indiceCuota, &reg_cuota, sizeof(t_reg_indice_cuota), cmp_indice_cuota) == ERROR)
+                {
+                    printf("Error: Fallo al insertar en el indice.\n");
+                    fclose(arch_dat);
+                    return ERROR;
+                }
+            }
+            else
+            {
+                t_reg_indice_cuota *vIndice = (t_reg_indice_cuota*)indiceCuota->vindice;
+                t_reg_indice_cuota *peor_guardado = &vIndice[4];
+                if (cmp_fechas(&reg_cuota.fecha_cuota, &peor_guardado->fecha_cuota) < 0)
+                {
+                    memcpy(peor_guardado, &reg_cuota, sizeof(t_reg_indice_cuota));
+
+                    qsort(indiceCuota->vindice, 5, sizeof(t_reg_indice_cuota), cmp_indice_cuota);
+                }
+            }
+        }
+        nro_reg++;
+    }
+    fclose(arch_dat);
+    return OK;
+}
 
 
 

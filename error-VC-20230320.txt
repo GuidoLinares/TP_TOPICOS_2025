@@ -11,7 +11,6 @@ Sexo: Valor invalido (debe ser 'F' o 'M')|2000002|Castro Mariano|19/09/1995|X|19
 Fecha Afiliacion: Debe ser posterior a la fecha de nacimiento|2000002|Castro Mariano|19/09/1995|M|19/09/1995|ADULTO|19/10/2014|A|BASIC
 Fecha Afiliacion: No puede ser posterior a la fecha de proceso|2000002|Castro Mariano|19/09/1995|M|20/09/2025|ADULTO|19/10/2014|A|BASIC
 Fecha Afiliacion: No puede ser posterior a la fecha de proceso|2000002|Castro Mariano|19/09/1995|M|01-01-2020|ADULTO|19/10/2014|A|BASIC
-Categoria: Inconsistente (deberia ser ADULTO)|2000001|Martinez Mauro|19/09/2005|F|19/09/2006|MENOR|19/10/2006|A|BASIC|menor@test.com
 Categoria: Inconsistente (deberia ser MENOR)|2000002|Castro Mariano|19/09/2008|M|19/09/2009|ADULTO|19/10/2009|A|BASIC
 Fecha Ultima Cuota: Debe ser posterior o igual a la fecha de afiliacion|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|18/09/2014|A|BASIC
 Fecha Ultima Cuota: No puede ser posterior a la fecha de proceso|2000002|Castro Mariano|19/09/1995|M|19/09/2014|ADULTO|21/09/2025|A|BASIC

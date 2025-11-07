@@ -32,6 +32,13 @@ typedef struct
    char nombreApe [50];
 }t_reg_indice_apeynom;
 
+typedef struct 
+{
+   t_fecha fecha_cuota;
+   unsigned nro_reg;
+}t_reg_indice_cuota;
+
+
 
 
 void indice_crear(t_indice *indice, size_t nmemb, size_t tamanyo);
@@ -47,9 +54,11 @@ int indice_construir_desde_dat(t_indice *indice, const char *path_archivo_dat, s
 int cmp_indice_dni(const void *a, const void *b);
 
 //NUEVAS MODIFICACIONES
-void* cmp_indice_nomape(const void*, const void*);
+int cmp_indice_nomape(const void*, const void*);
 int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archivo_dat);
-
+int cmp_indice_cuota(const void*a, const void*b);
+int cmp_fechas(const t_fecha *f1, const t_fecha *f2);
+int indice_construir_top5_cuota(t_indice *indice_top5, const char *path_archivo_dat);
 
 
 #endif // INDICE_H_INCLUDED
