@@ -13,6 +13,7 @@ int main()
     /// DECLARACIONES
     t_fecha fecha_proceso;
     t_indice indice;
+    t_reg_indice_apeynom indiceApeNom;
 
     puts("=== VIDEOCLUB CINEFILIA ===");
     puts("Sistema de Gestion de Miembros\n");
@@ -107,7 +108,7 @@ int main()
         {
         case 'A':
             system("cls");
-            alta_miembro(arch_bin, &indice, &fecha_proceso, cmp_indice_dni);
+            alta_miembro(arch_bin, &indice,&indiceApeNom, &fecha_proceso, cmp_indice_dni, cmp_indice_nomape);
             break;
 
         case 'B':

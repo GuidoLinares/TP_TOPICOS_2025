@@ -27,7 +27,7 @@ char capturar_opcion(char li, char ls)
     return opcion;
 }
 
-void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fecha, int (*cmp)(const void*, const void*))
+void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_reg_indice_apeynom*indiceNomApe, t_fecha *fecha, int (*cmp)(const void*, const void*), int(*cmp_indice_nomape)(void*,void*))
 {
     t_miembro nuevo;
     long dni_temp;
@@ -179,6 +179,12 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice, t_fecha *fec
     reg.dni = nuevo.dni;
     reg.nro_reg = pos / sizeof(t_miembro);
     indice_insertar(indice, &reg, sizeof(t_reg_indice), cmp);
+
+    t_reg_indice_apeynom reg_apeynom;
+    strcpy(reg_apeynom.nombreApe, nuevo.apeynom);
+    reg_apeynom.nro_reg = reg.nro_reg;
+
+    indice_insertar(indiceNomApe, &reg_apeynom, sizeof(t_reg_indice_apeynom), cmp_indice_nomape);
     
     printf("\nMiembro agregado exitosamente.\n");
 }

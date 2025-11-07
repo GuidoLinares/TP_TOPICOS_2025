@@ -1,16 +1,17 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "Win64-Portatil",
             "includePath": [
-                "C:\\msys64\\ucrt64\\include"
+                "${workspaceFolder}/**"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            // 1. Ahora usa "gcc" (portátil, usa el PATH)
+            "compilerPath": "gcc",
             "intelliSenseMode": "windows-gcc-x64"
         }
     ],
