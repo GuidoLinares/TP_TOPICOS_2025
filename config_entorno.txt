@@ -1,0 +1,101 @@
+/*
+ * =================================================================================
+ * RESUMEN: LÓGICA DE CREACIÓN DE ÍNDICE (Basado en este TDA)
+ * =================================================================================
+ *
+ * El objetivo es crear un array en memoria (el TDA t_indice) que nos permita
+ * acceder de forma rápida y ordenada a un archivo de datos (.dat) mucho más grande.
+ *
+ * Este TDA implementa un "array dinámico ordenado".
+ *
+ * ---
+ *
+ * PASO 1: DEFINICIÓN DE ESTRUCTURAS (en indice.h y miembros.h)
+ *
+ * 1.  t_miembro: Es el registro "pesado" (el dato completo) tal como está en el
+ * archivo "miembros.dat".
+ *
+ * 2.  t_indice: Es el TDA o "contenedor" genérico. Mantiene un puntero
+ * (void *vindice), un contador (cantidad_elementos_actual) y un
+ * tamaño máximo (cantidad_elementos_maxima).
+ *
+ * 3.  t_reg_indice / t_reg_indice_apeynom: Son las estructuras "ligeras"
+ * que realmente guardamos en el array del índice. Contienen SÓLO:
+ * a) El campo por el que queremos ordenar (ej. 'dni' o 'nombreApe').
+ * b) El 'nro_reg': Es el NÚMERO DE REGISTRO (0, 1, 2...) que
+ * ocupa ese miembro en el archivo .dat. NO es el offset en bytes.
+ *
+ *
+ * PASO 2: LA FUNCIÓN "CONSTRUCTORA" (ej: indice_construir_desde_dat en indice.c)
+ *
+ * Esta es la función principal que orquesta la creación del índice.
+ *
+ * 1.  Recibe el TDA 'indice' (inicializado pero vacío) y el 'path_archivo_dat'.
+ * 2.  Abre el archivo .dat en modo lectura binaria ("rb").
+ * 3.  Inicializa un contador de registros: 'unsigned nro_reg = 0;'.
+ *
+ *
+ * PASO 3: RECORRIDO SECUENCIAL DEL .DAT
+ *
+ * 1.  Inicia un bucle: 'while (fread(&miembro_leido, sizeof(t_miembro), 1, arch_dat))'.
+ * Esto lee el archivo .dat registro por registro, desde el principio hasta el fin.
+ *
+ * 2.  DENTRO DEL BUCLE (por cada miembro leído):
+ * a) Se aplica un filtro. Ej: 'if (miembro_leido.estado == 'A')'.
+ * b) Se crea el registro "ligero" (ej. 't_reg_indice nuevo_reg_indice').
+ * c) Se copian los datos clave:
+ * 'nuevo_reg_indice.dni = miembro_leido.dni;'
+ * 'nuevo_reg_indice.nro_reg = nro_reg;'
+ *
+ *
+ * PASO 4: INSERCIÓN ORDENADA (El núcleo del TDA)
+ *
+ * 1.  En lugar de cargar todo y ordenarlo al final (con qsort), este TDA
+ * inserta cada registro EN ORDEN en el array dinámico.
+ *
+ * 2.  Se llama a: 'indice_insertar(indice, &nuevo_reg_indice, tamanyo, cmp_func)'.
+ *
+ * 3.  La función 'indice_insertar' HACE TODO ESTO:
+ * a) Comprueba si el array está lleno ('indice_lleno').
+ * b) Si está lleno, llama a 'indice_redimensionar' (usando realloc)
+ * para agrandar el 'void *vindice'.
+ * c) Busca la posición correcta 'pos' donde insertar, usando la
+ * función 'cmp' (ej. 'cmp_indice_dni').
+ * d) Mueve todos los elementos ('memmove') desde 'pos' hasta el final
+ * una posición hacia la derecha para "hacer lugar".
+ * e) Copia el 'nuevo_reg_indice' en la 'pos' correcta ('memcpy').
+ * f) Incrementa 'indice->cantidad_elementos_actual'.
+ *
+ * 4.  (Opcional: Se usa 'indice_buscar' ANTES de insertar para
+ * detectar y omitir duplicados en el .dat).
+ *
+ *
+ * PASO 5: USO DEL ÍNDICE (Para Listar o Buscar)
+ *
+ * 1.  PARA BUSCAR: Se llama a 'indice_buscar'. Esta función implementa
+ * una búsqueda binaria sobre el 'void *vindice' (que ya está ordenado),
+ * usando la 'cmp_func' para navegar.
+ *
+ * 2.  PARA LISTAR (En el 'menu.c', por ejemplo):
+ * a) Se recorre el array 'indice->vindice' con un 'for' (de 0 a cant_actual).
+ * b) Por cada 't_reg_indice' del array, se obtiene el 'nro_reg'.
+ * c) Se calcula el offset: 'long pos = nro_reg * sizeof(t_miembro);'
+ * d) Se salta a esa posición en el .dat: 'fseek(pf_dat, pos, SEEK_SET);'
+ * e) Se lee el registro completo: 'fread(&miembro_completo, ...);'
+ * f) Se muestra 'miembro_completo'.
+ * (Como el array 'indice->vindice' está ordenado, el listado sale ordenado).
+ *
+ *
+ * NOTA ESPECIAL: TOP 5 (indice_construir_top5_cuota)
+ *
+ * Esta función es diferente. No carga un índice completo.
+ * 1.  Mantiene un índice ('indiceCuota') de MÁXIMO 5 elementos.
+ * 2.  Mientras 'cantidad_elementos_actual < 5', simplemente usa 'indice_insertar'.
+ * 3.  Cuando el índice YA TIENE 5 elementos:
+ * a) Obtiene el "peor" guardado (el de la posición 4, ya que está ordenado).
+ * b) Compara la 'fecha_cuota' del miembro actual con la del "peor".
+ * c) Si la fecha actual es MEJOR (más antigua, cmp > 0), REEMPLAZA
+ * al "peor" en el array.
+ * d) Vuelve a ordenar el array de 5 elementos con 'qsort' para
+ * mantenerlo ordenado y que el "peor" vuelva a estar al final.
+ */

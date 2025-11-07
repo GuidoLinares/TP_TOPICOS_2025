@@ -2,17 +2,22 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="procesar_txt.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="598" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="miembros.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="82" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="validacion.c" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="procesar_txt.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4629" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="validacion.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="375" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="validacion.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2100" topLine="69" />
 		</Cursor>
@@ -23,27 +28,23 @@
 	</File>
 	<File name="indice.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="9214" topLine="70" />
+			<Cursor1 position="13706" topLine="87" />
 		</Cursor>
+		<Folding>
+			<Collapse line="79" />
+			<Collapse line="101" />
+			<Collapse line="145" />
+			<Collapse line="191" />
+			<Collapse line="237" />
+			<Collapse line="250" />
+			<Collapse line="257" />
+			<Collapse line="266" />
+			<Collapse line="313" />
+		</Folding>
 	</File>
 	<File name="fecha.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="502" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="procesar_txt.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4629" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4175" topLine="115" />
-		</Cursor>
-	</File>
-	<File name="validacion.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="375" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="menu.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -51,28 +52,46 @@
 			<Cursor1 position="890" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="menu.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="menu.c" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="20819" topLine="1" />
+			<Cursor1 position="24538" topLine="59" />
 		</Cursor>
 		<Folding>
+			<Collapse line="4" />
+			<Collapse line="11" />
 			<Collapse line="30" />
 			<Collapse line="132" />
 			<Collapse line="192" />
 			<Collapse line="251" />
+			<Collapse line="315" />
 			<Collapse line="352" />
+			<Collapse line="364" />
 			<Collapse line="388" />
+			<Collapse line="457" />
+			<Collapse line="480" />
 			<Collapse line="529" />
+			<Collapse line="640" />
+			<Collapse line="669" />
 		</Folding>
+	</File>
+	<File name="procesar_txt.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="598" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3301" topLine="88" />
+		</Cursor>
 	</File>
 	<File name="fecha.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2032" topLine="48" />
 		</Cursor>
 	</File>
-	<File name="indice.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="indice.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="307" topLine="0" />
+			<Cursor1 position="307" topLine="18" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
