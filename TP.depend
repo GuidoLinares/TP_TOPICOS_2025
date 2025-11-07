@@ -357,7 +357,7 @@
 1761953049 source:s:\desktop\tp_topicos_2025\indice.c
 	"indice.h"
 
-1761620653 s:\desktop\tp_topicos_2025\indice.h
+1762533521 s:\desktop\tp_topicos_2025\indice.h
 	<stdlib.h>
 	<string.h>
 	<stdio.h>
@@ -366,7 +366,7 @@
 1761620558 s:\desktop\tp_topicos_2025\miembros.h
 	"fecha.h"
 
-1761620558 source:s:\desktop\tp_topicos_2025\procesar_txt.c
+1762005155 source:s:\desktop\tp_topicos_2025\procesar_txt.c
 	"procesar_txt.h"
 
 1761620558 s:\desktop\tp_topicos_2025\procesar_txt.h
@@ -385,14 +385,14 @@
 	<ctype.h>
 	<string.h>
 
-1761683426 s:\desktop\tp_topicos_2025\menu.h
+1762533533 s:\desktop\tp_topicos_2025\menu.h
 	<stdio.h>
 	<stdlib.h>
 	"validacion.h"
 	<ctype.h>
 	"indice.h"
 
-1761620558 source:s:\desktop\tp_topicos_2025\validacion.c
+1762005182 source:s:\desktop\tp_topicos_2025\validacion.c
 	"validacion.h"
 
 1761683495 source:s:\desktop\tp_topicos_2025\main.c
