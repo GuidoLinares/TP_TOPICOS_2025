@@ -153,7 +153,7 @@ int indice_construir_desde_dat(t_indice *indice, const char *path_archivo_dat, s
     t_miembro miembro_leido;
     t_reg_indice nuevo_reg_indice;
     unsigned nro_reg = 0;
-    
+
     // Leemos el archivo .dat de principio a fin
     while (fread(&miembro_leido, sizeof(t_miembro), 1, arch_dat))
     {
@@ -182,7 +182,7 @@ int indice_construir_desde_dat(t_indice *indice, const char *path_archivo_dat, s
                 printf("ADVERTENCIA: DNI duplicado %ld omitido durante la carga del indice desde .dat\n", nuevo_reg_indice.dni);
             }
         }
-        nro_reg++; 
+        nro_reg++;
     }
     fclose(arch_dat);
     return OK;
@@ -250,7 +250,7 @@ int cmp_indice_dni(const void *a, const void *b)
 int cmp_indice_nomape(const void*a, const void*b)
 {
     t_reg_indice_apeynom *reg_a = (t_reg_indice_apeynom*)a;
-    t_reg_indice_apeynom *reg_b = (t_reg_indice_apeynom*)b;   
+    t_reg_indice_apeynom *reg_b = (t_reg_indice_apeynom*)b;
     return strcmp(reg_a->nombreApe, reg_b->nombreApe);
 }
 
@@ -259,7 +259,7 @@ int cmp_indice_cuota(const void*a, const void*b)
 
     t_reg_indice_cuota*reg_a = (t_reg_indice_cuota*)a;
     t_reg_indice_cuota*reg_b =  (t_reg_indice_cuota*)b;
-    
+
     return cmp_fechas(&reg_a->fecha_cuota,&reg_b->fecha_cuota);
 }
 
@@ -274,7 +274,7 @@ int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archiv
         t_miembro miembro_leido;
         t_reg_indice_apeynom nuevo_reg_indice_nom_ape;
         unsigned nro_reg = 0;
-        
+
         // Leemos el archivo .dat de principio a fin
         while (fread(&miembro_leido, sizeof(t_miembro), 1, arch_dat))
         {
@@ -303,7 +303,7 @@ int indice_construir_apeynom_desde_dat(t_indice *indice, const char *path_archiv
                     printf("ADVERTENCIA: NOMNBRE Y APELLIDO duplicado %s omitido durante la carga del indice desde .dat\n", nuevo_reg_indice_nom_ape.nombreApe);
                 }
             }
-            nro_reg++; 
+            nro_reg++;
         }
         fclose(arch_dat);
         return OK;
@@ -318,24 +318,23 @@ int indice_construir_top5_cuota(t_indice* indiceCuota, const char *path_archivo_
         printf("Error: No se pudo abrir el archivo .dat para construir el indice.\n");
         return ERROR;
     }
-    
+
     t_miembro miembro_leido;
     t_reg_indice_cuota reg_cuota;
     unsigned nro_reg = 0;
-
 
     while (fread(&miembro_leido, sizeof(t_miembro),1,arch_dat))
     {
         if (miembro_leido.estado == 'A')
         {
-            reg_cuota.fecha_cuota = miembro_leido.fecha_ult_cuo; 
+            reg_cuota.fecha_cuota = miembro_leido.fecha_ult_cuo;
             reg_cuota.nro_reg = nro_reg;
-            
+
             if (indiceCuota->cantidad_elementos_actual < 5)
             {
                 if (indice_insertar(indiceCuota, &reg_cuota, sizeof(t_reg_indice_cuota), cmp_indice_cuota) == ERROR)
                 {
-                    printf("Error: Fallo al insertar en el indice.\n");
+                    printf("Error: Fallo al insertar en el indice (memoria).\n");
                     fclose(arch_dat);
                     return ERROR;
                 }
@@ -343,11 +342,11 @@ int indice_construir_top5_cuota(t_indice* indiceCuota, const char *path_archivo_
             else
             {
                 t_reg_indice_cuota *vIndice = (t_reg_indice_cuota*)indiceCuota->vindice;
-                t_reg_indice_cuota *peor_guardado = &vIndice[4];
-                if (cmp_fechas(&reg_cuota.fecha_cuota, &peor_guardado->fecha_cuota) < 0)
+                t_reg_indice_cuota *peor_guardado = &vIndice[indiceCuota->cantidad_elementos_actual - 1];
+
+                if (cmp_fechas(&reg_cuota.fecha_cuota, &peor_guardado->fecha_cuota) > 0)
                 {
                     memcpy(peor_guardado, &reg_cuota, sizeof(t_reg_indice_cuota));
-
                     qsort(indiceCuota->vindice, 5, sizeof(t_reg_indice_cuota), cmp_indice_cuota);
                 }
             }
@@ -357,10 +356,6 @@ int indice_construir_top5_cuota(t_indice* indiceCuota, const char *path_archivo_
     fclose(arch_dat);
     return OK;
 }
-
-
-
-
 
 
 

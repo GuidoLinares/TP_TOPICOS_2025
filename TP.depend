@@ -408,3 +408,65 @@
 1761692406 source:s:\desktop\tp_topicos_2025\menu.c
 	"menu.h"
 
+1762473430 source:c:\users\usuario\desktop\tp_topicos_2025\fecha.c
+	"fecha.h"
+
+1762473430 c:\users\usuario\desktop\tp_topicos_2025\fecha.h
+	<stdio.h>
+	<stdlib.h>
+
+1762537924 source:c:\users\usuario\desktop\tp_topicos_2025\indice.c
+	"indice.h"
+	"fecha.h"
+
+1762537191 c:\users\usuario\desktop\tp_topicos_2025\indice.h
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	"miembros.h"
+
+1762473430 c:\users\usuario\desktop\tp_topicos_2025\miembros.h
+	"fecha.h"
+
+1762538134 source:c:\users\usuario\desktop\tp_topicos_2025\main.c
+	<stdio.h>
+	<stdlib.h>
+	"fecha.h"
+	"miembros.h"
+	"validacion.h"
+	"menu.h"
+	"procesar_txt.h"
+	"indice.h"
+
+1762473430 c:\users\usuario\desktop\tp_topicos_2025\validacion.h
+	"fecha.h"
+	"miembros.h"
+	"menu.h"
+	"indice.h"
+	<ctype.h>
+	<string.h>
+
+1762537191 c:\users\usuario\desktop\tp_topicos_2025\menu.h
+	<stdio.h>
+	<stdlib.h>
+	"validacion.h"
+	<ctype.h>
+	"indice.h"
+
+1762473430 c:\users\usuario\desktop\tp_topicos_2025\procesar_txt.h
+	"fecha.h"
+	"miembros.h"
+	<string.h>
+	<stdlib.h>
+	"validacion.h"
+	<stdio.h>
+
+1762537191 source:c:\users\usuario\desktop\tp_topicos_2025\menu.c
+	"menu.h"
+
+1762473430 source:c:\users\usuario\desktop\tp_topicos_2025\procesar_txt.c
+	"procesar_txt.h"
+
+1762473430 source:c:\users\usuario\desktop\tp_topicos_2025\validacion.c
+	"validacion.h"
+

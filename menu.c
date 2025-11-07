@@ -31,20 +31,20 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_indice*indi
 {
     t_miembro nuevo;
     long dni_temp;
-    
+
     printf("Ingresar DNI: ");
     scanf("%ld", &dni_temp);
-    
+
     // VALIDACIÓN 1: DNI único y en rango
     if(!validar_dni_unico(indice, dni_temp, cmp))
     {
         while(getchar() != '\n');
         return;
     }
-    
+
     nuevo.dni = dni_temp;
     while(getchar() != '\n');
-    
+
     // NOMBRE Y APELLIDO
     printf("Nombre y apellido: ");
     if(!fgets(nuevo.apeynom, sizeof(nuevo.apeynom), stdin))
@@ -52,97 +52,97 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_indice*indi
         return;
     }
     nuevo.apeynom[strcspn(nuevo.apeynom, "\n")] = '\0';
-    
+
     // VALIDACIÓN 2: Nombre
     if(!validar_nombre(nuevo.apeynom))
     {
         return;
     }
-    
+
     // FECHA DE NACIMIENTO
     printf("Fecha de nacimiento (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_nac.dia, &nuevo.fecha_nac.mes, &nuevo.fecha_nac.anio);
-    
+
     // VALIDACIÓN 3: Fecha de nacimiento (incluye edad >= 10)
     if(!validar_fecha_nacimiento(&nuevo.fecha_nac, fecha))
     {
         while(getchar() != '\n');
         return;
     }
-    
+
     // FECHA DE AFILIACIÓN
     printf("Fecha de afiliación (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_afi.dia, &nuevo.fecha_afi.mes, &nuevo.fecha_afi.anio);
-    
+
     // VALIDACIÓN 4: Fecha de afiliación
     if(!validar_fecha_afiliacion(&nuevo.fecha_afi, &nuevo.fecha_nac, fecha))
     {
         while(getchar() != '\n');
         return;
     }
-    
+
     // SEXO
     printf("Sexo (M/F): ");
     while(getchar() != '\n');
     scanf("%c", &nuevo.sexo);
-    
+
     // VALIDACIÓN 5: Sexo
     if(!validar_sexo(nuevo.sexo))
     {
         while(getchar() != '\n');
         return;
     }
-    
+
     nuevo.sexo = toupper(nuevo.sexo);
-    
+
     // CATEGORÍA
     printf("Categoria (ADULTO/MENOR): ");
     while(getchar() != '\n');
     fgets(nuevo.categoria, sizeof(nuevo.categoria), stdin);
     nuevo.categoria[strcspn(nuevo.categoria, "\n")] = '\0';
-    
+
     for(int i = 0; nuevo.categoria[i]; i++) {
         nuevo.categoria[i] = toupper(nuevo.categoria[i]);
     }
-    
+
     // VALIDACIÓN 6: Categoría (consistencia con edad)
     if(!validar_categoria(nuevo.categoria, &nuevo.fecha_nac, fecha))
     {
         return;
     }
-    
+
     // FECHA ÚLTIMA CUOTA
     printf("Fecha ultima cuota paga (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &nuevo.fecha_ult_cuo.dia, &nuevo.fecha_ult_cuo.mes, &nuevo.fecha_ult_cuo.anio);
-    
+
     // VALIDACIÓN 7: Fecha última cuota
     if(!validar_fecha_ultima_cuota(&nuevo.fecha_ult_cuo, &nuevo.fecha_afi, fecha))
     {
         while(getchar() != '\n');
         return;
     }
-    
+
     nuevo.estado = 'A';
-    
+
     // PLAN
     printf("Plan (BASIC/PREMIUM/VIP/FAMILY): ");
     while(getchar() != '\n');
     fgets(nuevo.plan, sizeof(nuevo.plan), stdin);
     nuevo.plan[strcspn(nuevo.plan, "\n")] = '\0';
-    
+
     for(int i = 0; nuevo.plan[i]; i++) {
         nuevo.plan[i] = toupper(nuevo.plan[i]);
     }
-    
+
     // VALIDACIÓN 8: Plan
     if(!validar_plan(nuevo.plan))
     {
         return;
     }
-    
+
     // EMAIL TUTOR (si es menor)
     int es_menor = (calcular_edad(&nuevo.fecha_nac, fecha) < 18);
-    
+
     if(es_menor)
     {
         printf("Email tutor: ");
@@ -153,13 +153,13 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_indice*indi
     {
         strcpy(nuevo.emailTutor, "");
     }
-    
+
     // VALIDACIÓN 9: Email tutor (incluye validación de formato y regla adulto/menor)
     if(!validar_email_tutor(nuevo.emailTutor, es_menor))
     {
         return;
     }
-    
+
     // TODAS LAS VALIDACIONES PASARON - AHORA SÍ GRABAR
     FILE *pf = fopen(nombre_archivo_bin, "ab");
     if(!pf)
@@ -167,13 +167,13 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_indice*indi
         printf("Error al abrir el archivo binario.\n");
         return;
     }
-    
+
     // AGREGAR REGISTRO AL FINAL DEL ARCHIVO
     fseek(pf, 0, SEEK_END);
     long pos = ftell(pf);
     fwrite(&nuevo, sizeof(t_miembro), 1, pf);
     fclose(pf);
-    
+
     // INSERTAR EN EL ÍNDICE
     t_reg_indice reg;
     reg.dni = nuevo.dni;
@@ -185,7 +185,7 @@ void alta_miembro(const char *nombre_archivo_bin, t_indice *indice,t_indice*indi
     reg_apeynom.nro_reg = reg.nro_reg;
 
     indice_insertar(indiceNomApe, &reg_apeynom, sizeof(t_reg_indice_apeynom), cmp_indice_nomape);
-    
+
     printf("\nMiembro agregado exitosamente.\n");
 }
 
@@ -659,11 +659,11 @@ void mostrar_estadisticas(char *arch_bin)
             contAltas ++;
         else if (miembros.estado == 'B')
             contBajas++;
-    
+
     }
-    
+
     printf("\n ESTADISTICAS DEL ARCHIVO %s",arch_bin);
-    printf("\n TOTAL MIEMBROS: %d \n TOTAL MIEMBROS ACTIVOS: %d \n TOTAL MIEMBROS INACTIVOS: %d",contTotMiemb, contAltas, contBajas);    
+    printf("\n TOTAL MIEMBROS: %d \n TOTAL MIEMBROS ACTIVOS: %d \n TOTAL MIEMBROS INACTIVOS: %d",contTotMiemb, contAltas, contBajas);
 }
 
 void listar_miembros_nombre(const t_indice *indice_apeynom, const char *nombre_archivo_bin)
@@ -706,6 +706,8 @@ void listar_miembros_nombre(const t_indice *indice_apeynom, const char *nombre_a
 
 void top5CuotasAntiguas(const t_indice* indiceCuota, const char *nombre_archivo_bin)
 {
+    // t_reg_indice_cuota, t_miembro, y t_fecha deben estar definidas y accesibles.
+
     puts("\n--- Listado de las 5 cuotas mas antiguas (Ordenados por Fecha) ---\n");
 
     if (indice_vacio(indiceCuota))
@@ -713,65 +715,51 @@ void top5CuotasAntiguas(const t_indice* indiceCuota, const char *nombre_archivo_
         puts("No hay miembros activos para listar.\n");
         return;
     }
-    
-    printf("DEBUG: cantidad_elementos_actual = %u\n", indiceCuota->cantidad_elementos_actual);
 
     FILE*pf = fopen(nombre_archivo_bin, "rb");
     if (!pf)
     {
-        puts("\nError al abrir el archivo binario.\n");
+        puts("Error: No se pudo abrir el archivo binario de miembros.\n");
         return;
     }
-    
-    t_reg_indice_cuota *vIndiceCuota = (t_reg_indice_cuota*)indiceCuota->vindice;
-    t_miembro miembros;
+
+    // Calcular el lmite: mnimo entre 5 y la cantidad actual de elementos
+    const t_reg_indice_cuota *vIndiceCuota = (const t_reg_indice_cuota*)indiceCuota->vindice;
+    t_miembro miembro_leido;
     int limite = (indiceCuota->cantidad_elementos_actual < 5) ? indiceCuota->cantidad_elementos_actual : 5;
 
-    printf("\n TOP 5 FECHAS MAS ANTIGUAS (limite=%d):\n", limite);
-    
-    // PRIMERO: Ver qué hay en el índice
-    printf("\nContenido del indice:\n");
-    for (int i = 0; i < limite; i++)
-    {
-        printf("  [%d] nro_reg=%u, fecha_en_indice=%02d/%02d/%04d\n", 
-               i, 
-               vIndiceCuota[i].nro_reg,
-               vIndiceCuota[i].fecha_cuota.dia,
-               vIndiceCuota[i].fecha_cuota.mes,
-               vIndiceCuota[i].fecha_cuota.anio);
-    }
-    
-    // SEGUNDO: Leer del archivo
-    printf("\nLeyendo del archivo .dat:\n");
+    printf("Se muestran las %d cuotas ms antiguas (registros con menor fecha):\n\n", limite);
+
+    // Encabezado de la tabla (opcional)
+    printf("%-5s | %-10s | %-10s | %s\n", "NRO", "DNI", "ESTADO", "FECHA CUOTA");
+    printf("-------------------------------------------\n");
+
     for (int i = 0; i < limite; i++)
     {
         unsigned nro_reg = vIndiceCuota[i].nro_reg;
         long pos_bytes = nro_reg * sizeof(t_miembro);
-        
-        printf("  [%d] Buscando nro_reg=%u en pos_bytes=%ld... ", i, nro_reg, pos_bytes);
-        
+
         fseek(pf, pos_bytes, SEEK_SET);
-        
-        if (fread(&miembros, sizeof(t_miembro), 1, pf) == 1)
+
+        if (fread(&miembro_leido, sizeof(t_miembro), 1, pf) == 1)
         {
-            printf("OK - DNI=%ld, Estado=%c, Fecha=%02d/%02d/%04d\n",
-                   miembros.dni,
-                   miembros.estado,
-                   miembros.fecha_ult_cuo.dia, 
-                   miembros.fecha_ult_cuo.mes, 
-                   miembros.fecha_ult_cuo.anio);
+            // Muestra los datos formateados
+            printf("%-5u | %-10ld | %-10c | %02d/%02d/%04d\n",
+                   nro_reg,
+                   miembro_leido.dni,
+                   miembro_leido.estado,
+                   miembro_leido.fecha_ult_cuo.dia,
+                   miembro_leido.fecha_ult_cuo.mes,
+                   miembro_leido.fecha_ult_cuo.anio);
         }
         else
         {
-            printf("ERROR AL LEER!\n");
+            printf("%-5u | ERROR: No se pudo leer el registro en posicin %ld.\n", nro_reg, pos_bytes);
         }
     }
-    
+
     fclose(pf);
 }
-
-
-
 
 
 

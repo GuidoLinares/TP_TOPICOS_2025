@@ -84,7 +84,7 @@ int main()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     puts("Creando indice APELLIDO Y NOMBRE en memoria...\n");
-    indice_crear(&indiceApeNom, 0, sizeof(t_reg_indice_apeynom)); 
+    indice_crear(&indiceApeNom, 0, sizeof(t_reg_indice_apeynom));
 
     if (indice_construir_apeynom_desde_dat(&indiceApeNom, arch_bin) == ERROR)
     {
@@ -96,9 +96,9 @@ int main()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     puts("Creando indice Fecha cuota paga en memoria...\n");
-    indice_crear(&indiceCuota, 0, sizeof(t_reg_indice_cuota)); 
+    indice_crear(&indiceCuota, 0, sizeof(t_reg_indice_cuota));
 
-    if (indice_construir_apeynom_desde_dat(&indiceCuota, arch_bin) == ERROR)
+    if (indice_construir_top5_cuota(&indiceCuota, arch_bin) == ERROR)
     {
         puts("Error: No se pudo construir el indice de Apellido y Nombre.\n");
         indice_vaciar(&indiceCuota);
